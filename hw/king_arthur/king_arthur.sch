@@ -1,0 +1,516 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "Driver za Elektro Magent"
+Date "2021-02-22"
+Rev "1.0"
+Comp "Mateo Marcelic"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L ESP8266:NodeMCU_1.0_(ESP-12E) U3
+U 1 1 6033F2A7
+P 5200 4800
+F 0 "U3" H 5200 5887 60  0000 C CNN
+F 1 "NodeMCU_1.0_(ESP-12E)" H 5200 5781 60  0000 C CNN
+F 2 "" H 4600 3950 60  0000 C CNN
+F 3 "" H 4600 3950 60  0000 C CNN
+	1    5200 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0101
+U 1 1 603430BD
+P 4050 5600
+F 0 "#PWR0101" H 4050 5350 50  0001 C CNN
+F 1 "GND" H 4055 5427 50  0000 C CNN
+F 2 "" H 4050 5600 50  0001 C CNN
+F 3 "" H 4050 5600 50  0001 C CNN
+	1    4050 5600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0102
+U 1 1 60344D4E
+P 4350 5600
+F 0 "#PWR0102" H 4350 5450 50  0001 C CNN
+F 1 "+5V" H 4365 5773 50  0000 C CNN
+F 2 "" H 4350 5600 50  0001 C CNN
+F 3 "" H 4350 5600 50  0001 C CNN
+	1    4350 5600
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4350 5500 4350 5600
+Wire Wire Line
+	4400 5400 4050 5400
+Wire Wire Line
+	4350 5500 4400 5500
+Wire Wire Line
+	4050 5400 4050 5600
+NoConn ~ 4400 5300
+NoConn ~ 4400 5200
+NoConn ~ 4400 5100
+NoConn ~ 4400 4100
+NoConn ~ 4400 4200
+NoConn ~ 4400 4300
+NoConn ~ 4400 4400
+NoConn ~ 4400 4500
+NoConn ~ 4400 4600
+NoConn ~ 4400 4700
+NoConn ~ 4400 4800
+NoConn ~ 4400 4900
+NoConn ~ 4400 5000
+NoConn ~ 6000 4100
+NoConn ~ 6000 4300
+NoConn ~ 6000 4500
+NoConn ~ 6000 4600
+NoConn ~ 6000 4700
+NoConn ~ 6000 4800
+NoConn ~ 6000 5000
+NoConn ~ 6000 5100
+NoConn ~ 6000 5200
+NoConn ~ 6000 5300
+NoConn ~ 6000 5400
+NoConn ~ 6000 5500
+$Comp
+L Transistor_FET:IRLZ34N Q1
+U 1 1 60354116
+P 8000 4400
+F 0 "Q1" H 8204 4446 50  0000 L CNN
+F 1 "IRLZ24N" H 8204 4355 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 8250 4325 50  0001 L CIN
+F 3 "http://www.infineon.com/dgdl/irlz34npbf.pdf?fileId=5546d462533600a40153567206892720" H 8000 4400 50  0001 L CNN
+	1    8000 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0103
+U 1 1 603552ED
+P 8100 4750
+F 0 "#PWR0103" H 8100 4500 50  0001 C CNN
+F 1 "GND" H 8105 4577 50  0000 C CNN
+F 2 "" H 8100 4750 50  0001 C CNN
+F 3 "" H 8100 4750 50  0001 C CNN
+	1    8100 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8100 4600 8100 4750
+$Comp
+L Transistor_FET:IRLZ34N Q2
+U 1 1 60364A17
+P 8850 4400
+F 0 "Q2" H 9054 4446 50  0000 L CNN
+F 1 "IRLZ24N" H 9054 4355 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 9100 4325 50  0001 L CIN
+F 3 "http://www.infineon.com/dgdl/irlz34npbf.pdf?fileId=5546d462533600a40153567206892720" H 8850 4400 50  0001 L CNN
+	1    8850 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0104
+U 1 1 60364A1D
+P 8950 4750
+F 0 "#PWR0104" H 8950 4500 50  0001 C CNN
+F 1 "GND" H 8955 4577 50  0000 C CNN
+F 2 "" H 8950 4750 50  0001 C CNN
+F 3 "" H 8950 4750 50  0001 C CNN
+	1    8950 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 4600 8950 4750
+Wire Wire Line
+	7600 4650 8650 4650
+Wire Wire Line
+	8650 4650 8650 4400
+$Comp
+L Device:R R1
+U 1 1 6036E172
+P 8100 3850
+F 0 "R1" H 8150 3900 50  0000 L CNN
+F 1 "2" H 8150 3800 50  0000 L CNN
+F 2 "" V 8030 3850 50  0001 C CNN
+F 3 "~" H 8100 3850 50  0001 C CNN
+	1    8100 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 6036E906
+P 8950 3850
+F 0 "R2" H 9000 3900 50  0000 L CNN
+F 1 "2" H 9000 3800 50  0000 L CNN
+F 2 "" V 8880 3850 50  0001 C CNN
+F 3 "~" H 8950 3850 50  0001 C CNN
+	1    8950 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8100 4000 8100 4200
+Wire Wire Line
+	8950 4000 8950 4200
+Text Notes 8150 4050 0    50   ~ 0
+50W\n
+Text Notes 9000 4050 0    50   ~ 0
+50W
+$Comp
+L Connector:Conn_01x02_Female J1
+U 1 1 6037A7CA
+P 7850 3150
+F 0 "J1" H 7878 3126 50  0000 L CNN
+F 1 "ELEKTROMAGNET" H 7878 3035 50  0000 L CNN
+F 2 "" H 7850 3150 50  0001 C CNN
+F 3 "~" H 7850 3150 50  0001 C CNN
+	1    7850 3150
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED D1
+U 1 1 6037C4C4
+P 8750 3100
+F 0 "D1" V 8789 2982 50  0000 R CNN
+F 1 "LED" V 8698 2982 50  0000 R CNN
+F 2 "" H 8750 3100 50  0001 C CNN
+F 3 "~" H 8750 3100 50  0001 C CNN
+	1    8750 3100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_Small R3
+U 1 1 6037D8CF
+P 8750 2800
+F 0 "R3" H 8809 2846 50  0000 L CNN
+F 1 "46k" H 8809 2755 50  0000 L CNN
+F 2 "" H 8750 2800 50  0001 C CNN
+F 3 "~" H 8750 2800 50  0001 C CNN
+	1    8750 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8750 2900 8750 2950
+Wire Wire Line
+	8750 3250 8750 3350
+Wire Wire Line
+	8050 3350 8050 3150
+Wire Wire Line
+	8050 3350 8400 3350
+Wire Wire Line
+	8050 2700 8050 3050
+Wire Wire Line
+	8050 2700 8400 2700
+Wire Wire Line
+	8100 3700 8400 3700
+Wire Wire Line
+	8400 3350 8400 3700
+Connection ~ 8400 3350
+Wire Wire Line
+	8400 3350 8750 3350
+Connection ~ 8400 3700
+Wire Wire Line
+	8400 3700 8950 3700
+Text Notes 9100 3150 0    50   ~ 10
+Indicator LED\nEL is power?
+Wire Notes Line
+	8600 3450 9650 3450
+Wire Notes Line
+	9650 3450 9650 2500
+Wire Notes Line
+	9650 2500 8600 2500
+Wire Notes Line
+	8600 2500 8600 3450
+$Comp
+L Connector:Conn_WallPlug_Earth P1
+U 1 1 6039CF6D
+P 1000 1000
+F 0 "P1" H 1067 1325 50  0000 C CNN
+F 1 "Uticnica" H 1067 1234 50  0000 C CNN
+F 2 "" H 1400 1000 50  0001 C CNN
+F 3 "~" H 1400 1000 50  0001 C CNN
+	1    1000 1000
+	1    0    0    -1  
+$EndComp
+NoConn ~ 1300 1300
+$Comp
+L cus:Meanwell_LPV-100-12 U2
+U 1 1 603A78C5
+P 2150 1150
+F 0 "U2" H 2200 1715 50  0000 C CNN
+F 1 "Meanwell_LPV-100-12" H 2200 1624 50  0000 C CNN
+F 2 "" H 2150 1150 50  0001 C CNN
+F 3 "" H 2150 1150 50  0001 C CNN
+	1    2150 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1300 900  1700 900 
+Wire Wire Line
+	1300 1100 1700 1100
+Wire Wire Line
+	1700 1100 1700 1050
+$Comp
+L power:GND #PWR0105
+U 1 1 603AABA7
+P 2850 1100
+F 0 "#PWR0105" H 2850 850 50  0001 C CNN
+F 1 "GND" H 2855 927 50  0000 C CNN
+F 2 "" H 2850 1100 50  0001 C CNN
+F 3 "" H 2850 1100 50  0001 C CNN
+	1    2850 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L cus:+12V #PWR0106
+U 1 1 603AB733
+P 2850 850
+F 0 "#PWR0106" H 2850 700 50  0001 C CNN
+F 1 "+12V" H 2865 1023 50  0000 C CNN
+F 2 "" H 2850 850 50  0001 C CNN
+F 3 "" H 2850 850 50  0001 C CNN
+	1    2850 850 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2700 900  2850 900 
+Wire Wire Line
+	2850 900  2850 850 
+Wire Wire Line
+	2850 1100 2850 1050
+Wire Wire Line
+	2850 1050 2700 1050
+$Comp
+L Device:R_Small R4
+U 1 1 603BAAB3
+P 7200 4600
+F 0 "R4" H 7259 4646 50  0000 L CNN
+F 1 "46k" H 7259 4555 50  0000 L CNN
+F 2 "" H 7200 4600 50  0001 C CNN
+F 3 "~" H 7200 4600 50  0001 C CNN
+	1    7200 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7600 4650 7600 4400
+Connection ~ 7600 4400
+Wire Wire Line
+	7600 4400 7800 4400
+$Comp
+L power:GND #PWR0107
+U 1 1 603C6505
+P 7200 4750
+F 0 "#PWR0107" H 7200 4500 50  0001 C CNN
+F 1 "GND" H 7205 4577 50  0000 C CNN
+F 2 "" H 7200 4750 50  0001 C CNN
+F 3 "" H 7200 4750 50  0001 C CNN
+	1    7200 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 4700 7200 4750
+Wire Wire Line
+	7200 4400 7200 4500
+Connection ~ 7200 4400
+Wire Wire Line
+	7200 4400 7600 4400
+Text Notes 6800 4750 0    50   ~ 0
+PullDOWN
+Wire Wire Line
+	6000 4900 6300 4900
+$Comp
+L cus:+12V #PWR0108
+U 1 1 603D8A05
+P 8400 2600
+F 0 "#PWR0108" H 8400 2450 50  0001 C CNN
+F 1 "+12V" H 8415 2773 50  0000 C CNN
+F 2 "" H 8400 2600 50  0001 C CNN
+F 3 "" H 8400 2600 50  0001 C CNN
+	1    8400 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8400 2600 8400 2700
+Connection ~ 8400 2700
+Wire Wire Line
+	8400 2700 8750 2700
+$Comp
+L Connector:Conn_01x02_Female J2
+U 1 1 603FA40A
+P 6600 5450
+F 0 "J2" H 6628 5426 50  0000 L CNN
+F 1 "Senzor za mac" H 6628 5335 50  0000 L CNN
+F 2 "" H 6600 5450 50  0001 C CNN
+F 3 "~" H 6600 5450 50  0001 C CNN
+	1    6600 5450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6300 5450 6400 5450
+$Comp
+L power:GND #PWR0109
+U 1 1 604018F1
+P 6300 5600
+F 0 "#PWR0109" H 6300 5350 50  0001 C CNN
+F 1 "GND" H 6305 5427 50  0000 C CNN
+F 2 "" H 6300 5600 50  0001 C CNN
+F 3 "" H 6300 5600 50  0001 C CNN
+	1    6300 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6300 5600 6300 5550
+Wire Wire Line
+	6300 5550 6400 5550
+Wire Notes Line
+	7750 3550 9700 3550
+Wire Notes Line
+	9700 3550 9700 4150
+Wire Notes Line
+	9700 4150 7750 4150
+Wire Notes Line
+	7750 4150 7750 3550
+Text Notes 9050 3700 0    50   ~ 0
+Limitatori struje\nR_uk=1 OHM
+Wire Notes Line
+	10050 2150 10050 5050
+Wire Wire Line
+	6300 4900 6300 5450
+Wire Wire Line
+	6000 4400 7200 4400
+Wire Notes Line
+	6600 5050 6600 2150
+Wire Notes Line
+	6600 2150 10050 2150
+Wire Notes Line
+	6600 5050 10050 5050
+Text Notes 7950 2650 0    50   ~ 0
+I=5A\nPuk=60W\n
+Text Notes 7550 3150 0    50   ~ 0
+R=1
+Text Notes 8300 5050 0    50   ~ 0
+Dupli TRAN jer jedan moze 45 W disipirati\n
+Text Notes 6600 5900 0    50   ~ 0
+Efektivno DiGITALNI senzor \n0 - PRISUTAN\n1 - NEMA MACA\n
+Wire Notes Line
+	7800 5250 7800 6000
+Wire Notes Line
+	7800 6000 6200 6000
+Wire Notes Line
+	6200 6000 6200 5250
+Wire Notes Line
+	6200 5250 7800 5250
+Wire Notes Line
+	500  1500 3950 1500
+Wire Notes Line
+	3950 1500 3950 500 
+Text Notes 3150 600  0    50   ~ 0
+Napajanje uredjaja
+$Comp
+L Regulator_Linear:L7805 U1
+U 1 1 6046A222
+P 4900 800
+F 0 "U1" H 4900 1042 50  0000 C CNN
+F 1 "L7805" H 4900 951 50  0000 C CNN
+F 2 "" H 4925 650 50  0001 L CIN
+F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 4900 750 50  0001 C CNN
+	1    4900 800 
+	1    0    0    -1  
+$EndComp
+$Comp
+L cus:+12V #PWR0110
+U 1 1 6046C570
+P 4200 750
+F 0 "#PWR0110" H 4200 600 50  0001 C CNN
+F 1 "+12V" H 4215 923 50  0000 C CNN
+F 2 "" H 4200 750 50  0001 C CNN
+F 3 "" H 4200 750 50  0001 C CNN
+	1    4200 750 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0111
+U 1 1 6046CC29
+P 5400 750
+F 0 "#PWR0111" H 5400 600 50  0001 C CNN
+F 1 "+5V" H 5415 923 50  0000 C CNN
+F 2 "" H 5400 750 50  0001 C CNN
+F 3 "" H 5400 750 50  0001 C CNN
+	1    5400 750 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0112
+U 1 1 6046D113
+P 4900 1200
+F 0 "#PWR0112" H 4900 950 50  0001 C CNN
+F 1 "GND" H 4905 1027 50  0000 C CNN
+F 2 "" H 4900 1200 50  0001 C CNN
+F 3 "" H 4900 1200 50  0001 C CNN
+	1    4900 1200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C1
+U 1 1 6046DB6B
+P 4200 950
+F 0 "C1" H 4292 996 50  0000 L CNN
+F 1 "0.33u" H 4292 905 50  0000 L CNN
+F 2 "" H 4200 950 50  0001 C CNN
+F 3 "~" H 4200 950 50  0001 C CNN
+	1    4200 950 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C2
+U 1 1 6046E7EF
+P 5400 950
+F 0 "C2" H 5492 996 50  0000 L CNN
+F 1 "0.1u" H 5492 905 50  0000 L CNN
+F 2 "" H 5400 950 50  0001 C CNN
+F 3 "~" H 5400 950 50  0001 C CNN
+	1    5400 950 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 800  4600 800 
+Wire Wire Line
+	5200 800  5400 800 
+Wire Wire Line
+	5400 800  5400 850 
+Connection ~ 5400 800 
+Wire Wire Line
+	5400 1050 5400 1150
+Wire Wire Line
+	5400 1150 4900 1150
+Wire Wire Line
+	4900 1150 4900 1200
+Wire Wire Line
+	4900 1100 4900 1150
+Connection ~ 4900 1150
+Wire Wire Line
+	4200 1050 4200 1150
+Wire Wire Line
+	4200 1150 4900 1150
+Wire Wire Line
+	4200 800  4200 850 
+Wire Wire Line
+	5400 750  5400 800 
+Wire Wire Line
+	4200 750  4200 800 
+Connection ~ 4200 800 
+Wire Notes Line
+	4000 1500 5900 1500
+Wire Notes Line
+	5900 1500 5900 500 
+Text Notes 5050 1450 0    50   ~ 0
+Napajanje ESP8266\n
+NoConn ~ 6000 4200
+Text Notes 7050 6800 0    50   ~ 0
+Driver za elektromagnet pomocu ESP8266 MCU. (nodemcuv2)\nElektromatgnet drzi mac na mjestu te ga pusta u ovisnosi o algoritmu. \nSenzor maca signalizira dali EL. MAG, treba biti ukljucen il ne.
+$EndSCHEMATC
