@@ -6,7 +6,8 @@
 #define PIEZO_IN A0
 #define LED_EM_RELEASE 4     // D4
 #define LED_HUMAN_DETECTED 6 // D6
-#define SWORD_DETECTED 8     // D8
+#define SWORD_DETECTED 8
+// D8
 
 void blink_led(int led_pin, int ms) {
   digitalWrite(led_pin, HIGH);
@@ -14,15 +15,17 @@ void blink_led(int led_pin, int ms) {
   digitalWrite(led_pin, LOW);
 }
 
-int check_if_sword_is_present(uint8_t sword_pin) {
+uint8_t check_if_sword_is_present(uint8_t sword_pin) {
   uint8_t is_detected = 0; // assume is present
   for (int i = 0; i < 3; i++) {
     is_detected |= digitalRead(sword_pin);
   }
-  return ~is_detected;
+  Serial.println("Is detected?");
+  Serial.println(is_detected);
+  return is_detected;
 }
 void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
+  Serial.begin(9600);
   pinMode(LED_EM_RELEASE, OUTPUT);
   pinMode(LED_HUMAN_DETECTED, OUTPUT);
   pinMode(EM_TOGGLE, OUTPUT);
@@ -30,19 +33,20 @@ void setup() {
   pinMode(PIEZO_IN, INPUT);
   pinMode(SWORD_DETECTED, INPUT_PULLUP); // default 1
 
-  digitalWrite(LED_EM_RELEASE, 0);
-  digitalWrite(LED_HUMAN_DETECTED, 0);
-  digitalWrite(EM_TOGGLE, 0);
+  digitalWrite(LED_EM_RELEASE, LOW);
+  digitalWrite(LED_HUMAN_DETECTED, LOW);
+  digitalWrite(EM_TOGGLE, LOW);
 
-  while (!check_if_sword_is_present(
-      SWORD_DETECTED)) { // sword not detected, wait forever
-    digitalWrite(LED_EM_RELEASE, 1);
+  while (check_if_sword_is_present(SWORD_DETECTED) ==
+         1) { // sword not detected, wait forever
+    digitalWrite(LED_EM_RELEASE, HIGH);
+    Serial.println("No sword");
     delay(1000);
   };
 
   // when sword present, lock that MF
-  digitalWrite(LED_EM_RELEASE, 0);
-  digitalWrite(EM_TOGGLE, 1); // lock EM
+  digitalWrite(LED_EM_RELEASE, LOW);
+  digitalWrite(EM_TOGGLE, HIGH); // lock EM
 }
 
 #define MAX_PROBABILITY 100
@@ -55,21 +59,23 @@ void loop() {
   uint8_t random_number = 100;
 
   piezo_value = analogRead(PIEZO_IN); // check for little humans
-  if (piezo_value > 1000) {           // human detected
+  Serial.print("Piezo, read: ");
+  Serial.println(piezo_value);
+  if (piezo_value > 1000) { // human detected
     blink_led(LED_HUMAN_DETECTED, 500);
     random_number = rand() % MAX_PROBABILITY;
+    Serial.print("Random number");
+    Serial.println(random_number);
     if (random_number < probability) { // MY KING???
       digitalWrite(LED_EM_RELEASE, 1);
       digitalWrite(EM_TOGGLE, 0); // release EM
+    
       delay(10 * 1000);           // 10 sec or nothing
-    };
+      while (check_if_sword_is_present(SWORD_DETECTED) == 1)
+        ;
+    }
   }
-  while (!check_if_sword_is_present( // now we play the waiting game
-      SWORD_DETECTED)) {             // sword not detected, wait forever
-    digitalWrite(LED_EM_RELEASE, 1);
-    delay(1000);
-  };
   // SUCKER, he gave sword back
-  digitalWrite(LED_EM_RELEASE, 0);
-  digitalWrite(EM_TOGGLE, 1); // lock that shit down
+  digitalWrite(LED_EM_RELEASE, LOW);
+  digitalWrite(EM_TOGGLE, HIGH); // lock that shit down
 }
