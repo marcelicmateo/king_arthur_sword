@@ -69,8 +69,8 @@ void loop() {
     if (random_number < probability) { // MY KING???
       digitalWrite(LED_EM_RELEASE, 1);
       digitalWrite(EM_TOGGLE, 0); // release EM
-    
-      delay(10 * 1000);           // 10 sec or nothing
+
+      delay(10 * 1000); // 10 sec or nothing
       while (check_if_sword_is_present(SWORD_DETECTED) == 1)
         ;
     }
