@@ -3,6 +3,7 @@
 
 // pin declarations
 #define EM_TOGGLE 2 // D2
+#define POT_IN A2
 #define PIEZO_IN A0
 #define LED_EM_RELEASE 4     // D4
 #define LED_HUMAN_DETECTED 6 // D6
@@ -29,6 +30,7 @@ void setup() {
   pinMode(LED_EM_RELEASE, OUTPUT);
   pinMode(LED_HUMAN_DETECTED, OUTPUT);
   pinMode(EM_TOGGLE, OUTPUT);
+  pinMode(PIEZO_IN, INPUT);
 
   pinMode(PIEZO_IN, INPUT);
   pinMode(SWORD_DETECTED, INPUT_PULLUP); // default 1
@@ -49,13 +51,13 @@ void setup() {
   digitalWrite(EM_TOGGLE, HIGH); // lock EM
 }
 
-#define MAX_PROBABILITY 100
-#define PROBABILITY 19
-
+#define RAND_DIV 1020
+#define MIN_PROBABILITY 34
+#define MAX_PROBABILITY 204
 // the loop function runs over and over again forever
 void loop() {
   uint16_t piezo_value;
-  uint8_t probability = PROBABILITY; // 100 max
+  uint8_t probability = MIN_PROBABILITY; // 100 max
   uint8_t random_number = 100;
 
   piezo_value = analogRead(PIEZO_IN); // check for little humans
@@ -63,9 +65,12 @@ void loop() {
   Serial.println(piezo_value);
   if (piezo_value > 1000) { // human detected
     blink_led(LED_HUMAN_DETECTED, 500);
-    random_number = rand() % MAX_PROBABILITY;
+    random_number = rand() % RAND_DIV;
     Serial.print("Random number");
     Serial.println(random_number);
+    probability = analogRead(POT_IN);
+    Serial.println("Probabity: ");
+    Serial.println(probability);
     if (random_number < probability) { // MY KING???
       digitalWrite(LED_EM_RELEASE, 1);
       digitalWrite(EM_TOGGLE, 0); // release EM
