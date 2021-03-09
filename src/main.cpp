@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <stdlib.h>
 
-#define DEBUG false
+#define DEBUG true
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
