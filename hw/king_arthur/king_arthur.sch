@@ -624,4 +624,6 @@ Wire Wire Line
 	5100 3600 5100 3800
 NoConn ~ 5300 3800
 NoConn ~ 4400 2150
+Text Notes 2800 6350 0    50   ~ 0
+Internal pull up
 $EndSCHEMATC
