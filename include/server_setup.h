@@ -16,12 +16,12 @@ const char* sword_toogle(){
     static char status_otkljucan[]  {"Otkljucan"};
     static char status_zakljucan[]  {"Zakljucan"};
     if (all_pass) { // if true -- unlock
-        Serial.println("Locking sword");
+        Serial.println("Lock");
         all_pass=false;
         return status_zakljucan;
     }
     else { // all pass is FALSE -- lock initiated
-        Serial.println("Unlocking sword");
+        Serial.println("Unlock");
         all_pass = true;
         return status_otkljucan;
     }

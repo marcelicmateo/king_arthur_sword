@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <Servo.h>
 
 #include "dash.h"
 #include "include.h"
@@ -13,14 +14,42 @@
   if (DEBUG)                                                                   \
   Serial
 
+void setup() {
+  Serial.begin(9600);
+  // defining pin modes
+  pinMode(PIR_SENSOR, INPUT);
+  pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
+  motor.attach(STEPER_MOTOR);
+  motor.write(motor_position);
+  
+  wifi_setup();
+  server_setup();
+  Serial.println("Begin loop");
+}
+
+void loop() {
+
+  if (is_sword_present()) {
+    Serial.println("Sword detected");
+    if (!all_pass) {
+      lock_sword();
+      if (is_human_detected() || all_pass) {
+        unlock_sword();
+      }
+    } else {
+      unlock_sword();
+    }
+  }
+}
+
 bool is_sword_present() {
   static bool b{false};
-  b = (bool)digitalRead(INFRARED_OBSTICLE_SENSOR);
+  // b = (bool)digitalRead(INFRARED_OBSTICLE_SENSOR);
   return b;
 }
 bool is_human_detected() {
   static bool b{false};
-  b = (bool)digitalRead(PIR_SENSOR);
+  // b = (bool)digitalRead(PIR_SENSOR);
   return b;
 }
 
@@ -36,28 +65,23 @@ bool random_chance_to_release() {
   return b;
 }
 
-void lock_sword() { return; }
-void unlock_sword() { return; }
+void lock_sword() {
+  if (motor_position == locked_position)
+    return;
 
-void setup() {
-  Serial.begin(9600);
-  // defining pin modes
-  pinMode(PIR_SENSOR, INPUT);
-  pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
-  pinMode(STEPER_MOTOR, OUTPUT);
-
-  wifi_setup();
-  server_setup();
+  Serial.println("Locking sword");
+  motor_position = locked_position;
+  motor.write(motor_position);
+  Serial.println("Sword Locked");
+  return;
 }
+void unlock_sword() {
+  if (motor_position == unlocked_position)
+    return;
 
-void loop() {
-
-  if (is_sword_present()) {
-    if (!all_pass) {
-      lock_sword();
-      if (is_human_detected() || all_pass) {
-        unlock_sword();
-      }
-    }
-  }
+  Serial.println("Unlocking sword");
+  motor_position = unlocked_position;
+  motor.write(motor_position);
+  Serial.println("Sword unlocked");
+  return;
 }
