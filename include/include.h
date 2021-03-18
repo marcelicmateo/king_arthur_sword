@@ -1,4 +1,5 @@
 #pragma once
+#include <Arduino.h>
 #include <Servo.h>
 
 #define PIR_SENSOR D1 // human sensor

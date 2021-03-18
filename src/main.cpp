@@ -1,10 +1,3 @@
-#include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
-#include <ESPAsyncWebServer.h>
-#include <Servo.h>
-
-#include "dash.h"
 #include "include.h"
 #include "server_setup.h"
 #include "wifi_setup.h"
@@ -21,7 +14,7 @@ void setup() {
   pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
   motor.attach(STEPER_MOTOR);
   motor.write(motor_position);
-  
+
   wifi_setup();
   server_setup();
   Serial.println("Begin loop");
