@@ -1,8 +1,8 @@
 #pragma once
+#include "include.h"
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "dash.h"
-
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
@@ -11,31 +11,20 @@ void notFound(AsyncWebServerRequest *request) {
   request->send(404, "text/plain", "Not found");
 }
 
-const char *sword_lock(){
-    const char *c = "Locked";
-    return c;
-}
 
-const char * sword_unlock(){
-    const char *c = "Unlocked";
-    return c;
-}
-
-uint8_t perma_open=0;
-const char * sword_toogle(){
-    static int c=0; // unlocked
-    const char *status = "open" ;
-    if (c == 0) {
-        c=1;
-        perma_open=1;
-        status="Otkljucan";
+const char* sword_toogle(){
+    static char status_otkljucan[]  {"Otkljucan"};
+    static char status_zakljucan[]  {"Zakljucan"};
+    if (all_pass) { // if true -- unlock
+        Serial.println("Locking sword");
+        all_pass=false;
+        return status_zakljucan;
     }
-    else {
-        c=0;
-        perma_open = 0;
-        status="Zakljucan";
+    else { // all pass is FALSE -- lock initiated
+        Serial.println("Unlocking sword");
+        all_pass = true;
+        return status_otkljucan;
     }
-    return status;
 }
 
 
