@@ -18,4 +18,4 @@ else:
         with open(src, "r") as f2:
             f.writelines(f2.readlines())
         f.write(')rawliteral";')
-    print("File converted")
+    print(Fore.GREEN + "File converted")

@@ -2,7 +2,7 @@
 #include "server_setup.h"
 #include "wifi_setup.h"
 
-#define DEBUG true
+#define DEBUG false
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
@@ -25,9 +25,11 @@ void loop() {
   if (is_sword_present()) {
     Serial.println("Sword detected");
     if (!all_pass) {
-      lock_sword();
-      if (is_human_detected() || all_pass) {
+      if (is_human_detected() && random_chance_to_release()) {
         unlock_sword();
+        delay(5000); // cekaj da se mac izvuce
+      } else {
+        lock_sword();
       }
     } else {
       unlock_sword();
@@ -37,12 +39,14 @@ void loop() {
 
 bool is_sword_present() {
   static bool b{false};
-  // b = (bool)digitalRead(INFRARED_OBSTICLE_SENSOR);
+  b = (bool)digitalRead(INFRARED_OBSTICLE_SENSOR) ^
+      1; // negative logic senor so XOR for positive logic
   return b;
 }
+
 bool is_human_detected() {
   static bool b{false};
-  // b = (bool)digitalRead(PIR_SENSOR);
+  b = (bool)digitalRead(PIR_SENSOR);
   return b;
 }
 

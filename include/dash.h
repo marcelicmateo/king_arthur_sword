@@ -4,45 +4,98 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
 <html>
 
 <head>
+    <title> Kralj Artur </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         html {
-            font-family: Arial;
-            display: inline-block;
-            margin: 0px auto;
+            font-family: Arial, Helvetica, sans-serif;
             text-align: center;
         }
 
+        h1 {
+            font-size: 1.8rem;
+            color: white;
+        }
+
         h2 {
-            font-size: 3.0rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #143642;
         }
 
-        button {
-            font-size: 2.0rem
+        .topnav {
+            overflow: hidden;
+            background-color: #143642;
         }
 
-        p {
-            font-size: 3.0rem;
+        body {
+            margin: 0;
         }
 
-        .units {
-            font-size: 1.2rem;
+        .content {
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: #F8F7F9;
+            ;
+            box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        .button {
+            padding: 15px 50px;
+            font-size: 20px;
+            text-align: center;
+            outline: none;
+            color: rgb(0, 0, 0);
+            background-color: #97e2d4;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /*.button:hover {background-color: #0f8b8d}*/
+        .button:active {
+            background-color: #0f8b8d;
+            box-shadow: 2 2px #CDCDCD;
+            transform: translateY(2px);
+        }
+
+        .state {
+            font-size: 1.5rem;
+            color: #373d49;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-evenly;
+
         }
     </style>
 </head>
 
 <body>
-    <h2>Kralj Artur - konrolni panel</h2>
-    <p>
-        <span class="status">Status otkljucanosti: </span>
-        <span id="lock_status">%STATUS_MAC%</span>
-        <button id="lock_command_button" onclick=sword_toogle()>Otkljucaj/Zakljucaj</button>
-    </p>
-    <p>
-        <span class="dht-labels">Humidity</span>
-        <span id="humidity">%HUMIDITY%</span>
-        <sup class="units">%</sup>
-    </p>
+    <div class="topnav">
+        <h1>Kontrola Mehanizma</h1>
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <h2>Otkljucaj/Zakljucaj MAC u kamenu </h2>
+            <p class="state"><span id="lock_status">%STATUS_MAC%</span></p>
+            <button class="button" id="lock_command_button" onclick=sword_toogle()>Toogle</button>
+        </div>
+    </div>
+    <div class="content">
+        <div class="card">
+            <h2></h2>
+            <p class="state"><span>Kralj detektiran:</span> <span id=pir_sensor>%PIR_SENSOR%</span></p>
+            <p class="state"><span>Mac u kamenu:</span> <span id=ir_sensor>%IR_SENSOR%</span></p>
+        </div>
+    </div>
+
+
 
     <script>
         function sword_toogle() {
@@ -51,18 +104,29 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("lock_status").innerHTML =
                         this.responseText;
-                    if (this.responseText == 'Zakljucan') {
-                        document.getElementById('lock_command_button').innerHTML = "Otkljucaj"
-                    } else if (this.responseText == 'Otkljucan') {
-                        document.getElementById('lock_command_button').innerHTML = "Zakljucaj"
 
-                    }
 
                 }
             };
             xhttp.open("GET", "/sword_toogle", true);
             xhttp.send();
-        }
+        };
+
+
+        setInterval(function () {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var ir_pir = this.responseText.split(";");
+                    document.getElementById("pir_sensor").innerHTML = ir_pir[0];
+                    document.getElementById("ir_sensor").innerHTML = ir_pir[1];
+                }
+            };
+            xhttp.open("GET", "/ir_pir_sensor", true);
+            xhttp.send();
+        }, 500);
+
+
 
     </script>
 </body>
