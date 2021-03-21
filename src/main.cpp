@@ -2,13 +2,13 @@
 #include "server_setup.h"
 #include "wifi_setup.h"
 
-#define DEBUG true
+#define DEBUG false
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   // defining pin modes
   pinMode(PIR_SENSOR, INPUT);
   pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
@@ -38,7 +38,7 @@ void loop() {
 }
 
 bool is_sword_present() {
-  static bool b{false};
+  static bool b{true};
   b = (bool)digitalRead(INFRARED_OBSTICLE_SENSOR) ^
       1; // negative logic senor so XOR for positive logic
   return b;
@@ -51,10 +51,11 @@ bool is_human_detected() {
 }
 
 bool random_chance_to_release() {
-  constexpr int MAX_RANDOM_NUMBER{100};
+  constexpr int MAX_RANDOM_NUMBER{99}; // constant
   static bool b{false};
   static unsigned int chance{0};
   chance = rand() % MAX_RANDOM_NUMBER;
+  Serial.println("Chance to be a king: " + (String)chance);
   if (chance < probability_to_pass)
     b = true;
   else

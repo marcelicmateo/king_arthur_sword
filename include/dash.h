@@ -32,6 +32,11 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             margin: 0;
         }
 
+        span {
+            border-radius: 5px;
+            padding: 2px;
+        }
+
         .content {
             padding: 30px;
             max-width: 600px;
@@ -53,8 +58,7 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             outline: none;
             color: rgb(0, 0, 0);
             background-color: #97e2d4;
-            border: none;
-            border-radius: 5px;
+
         }
 
         /*.button:hover {background-color: #0f8b8d}*/
@@ -72,7 +76,8 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             display: flex;
             justify-content: space-evenly;
             flex-flow: wrap;
-
+            border-radius: 5px;
+            padding: 2px
         }
     </style>
 </head>
@@ -84,7 +89,7 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
 
     <div class="content">
         <div class="card">
-            <h2>Otkljucaj/Zakljucaj MAC u kamenu </h2>
+            <h2>Trajno Otkljucaj/Zakljucaj MAC u kamenu </h2>
             <p class="state"><span id="lock_status">%STATUS_MAC%</span></p>
             <button class="button" id="lock_command_button" onclick=sword_toogle()>Toogle</button>
         </div>
@@ -103,8 +108,10 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
     <div class="content">
         <div class="card">
             <h2></h2>
-            <p class="state"><span>Kralj detektiran:</span> <span id=pir_sensor>%PIR_SENSOR%</span></p>
-            <p class="state"><span>Mac u kamenu:</span> <span id=ir_sensor>%IR_SENSOR%</span></p>
+            <p class="state"><span>Covjek na platformi:</span> <span id=pir_sensor
+                    style="background-color:lightcoral;">%PIR_SENSOR%</span></p>
+            <p class="state"><span>Mac u kamenu:</span> <span id=ir_sensor
+                    style="background-color:lightcoral;">%IR_SENSOR%</span></p>
         </div>
     </div>
 
@@ -115,8 +122,13 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("lock_status").innerHTML =
-                        this.responseText;
+                    if (this.responseText == '0') {
+                        document.getElementById("lock_status").innerHTML =
+                            "Zakljucan"
+                    } else {
+                        document.getElementById("lock_status").innerHTML =
+                            "Otkljucan"
+                    }
                 }
             };
             xhttp.open("GET", "/sword_toogle", true);
@@ -129,8 +141,22 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var ir_pir = this.responseText.split(";");
-                    document.getElementById("pir_sensor").innerHTML = ir_pir[0];
-                    document.getElementById("ir_sensor").innerHTML = ir_pir[1];
+                    if (ir_pir[1] == '0') {
+                        document.getElementById('pir_sensor').setAttribute('style', 'background-color:lightcoral');
+                        document.getElementById("pir_sensor").innerHTML = "FALSE";
+                    }
+                    else {
+                        document.getElementById('pir_sensor').setAttribute('style', 'background-color:greenyellow');
+                        document.getElementById("pir_sensor").innerHTML = "TRUE";
+                    }
+                    if (ir_pir[0] == '0') {
+                        document.getElementById('ir_sensor').setAttribute('style', 'background-color:lightcoral');
+                        document.getElementById("ir_sensor").innerHTML = "FALSE"
+                    }
+                    else {
+                        document.getElementById('ir_sensor').setAttribute('style', 'background-color:greenyellow');
+                        document.getElementById("ir_sensor").innerHTML = "TRUE";
+                    }
                 }
             };
             xhttp.open("GET", "/ir_pir_sensor", true);

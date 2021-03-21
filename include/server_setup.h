@@ -11,28 +11,18 @@ void notFound(AsyncWebServerRequest *request) {
 }
 
 const char *sword_toogle() {
-  static char status_otkljucan[]{"Otkljucan"};
-  static char status_zakljucan[]{"Zakljucan"};
-  if (all_pass) { // if true -- unlock
-    Serial.println("Lock");
-    all_pass = false;
-    return status_zakljucan;
-  } else { // all pass is FALSE -- lock initiated
-    Serial.println("Unlock");
-    all_pass = true;
-    return status_otkljucan;
-  }
+  static char *c = (char *)&all_pass;
+  all_pass = !all_pass;
+  Serial.println(all_pass ? "Lock" : "Unlock");
+  return c;
 }
 
 const char *ir_pir_state() {
-  String state_true{"TRUE"};
-  String state_false{"FALSE"};
   static String c;
   static bool ir{0}, pir{0};
   ir = !(bool)digitalRead(INFRARED_OBSTICLE_SENSOR);
   pir = (bool)digitalRead(PIR_SENSOR);
-  c = (String)(ir ? state_true : state_false) + (String)(";") +
-      (String)(pir ? state_true : state_false);
+  c = (String)ir + ";" + (String)pir;
   return c.c_str();
 }
 
