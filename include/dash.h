@@ -62,6 +62,7 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             background-color: #0f8b8d;
             box-shadow: 2 2px #CDCDCD;
             transform: translateY(2px);
+            margin-top: 5px;
         }
 
         .state {
@@ -70,6 +71,7 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             font-weight: bold;
             display: flex;
             justify-content: space-evenly;
+            flex-flow: wrap;
 
         }
     </style>
@@ -89,6 +91,17 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
     </div>
     <div class="content">
         <div class="card">
+            <h2>Postotak Kraljeva</h2>
+            <p class="state"><span>Trenutni postotak: </span><span id="probability">%POSTOTAK% &#37;</span>
+            </p>
+            <p class="state">
+                <input id="new_probability" type="number" max=100 min=0 defaultValue="20">
+                <button class="button" id="submit_button" onclick=promijeni_postotak()>Promijeni</button>
+            </p>
+        </div>
+    </div>
+    <div class="content">
+        <div class="card">
             <h2></h2>
             <p class="state"><span>Kralj detektiran:</span> <span id=pir_sensor>%PIR_SENSOR%</span></p>
             <p class="state"><span>Mac u kamenu:</span> <span id=ir_sensor>%IR_SENSOR%</span></p>
@@ -104,8 +117,6 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("lock_status").innerHTML =
                         this.responseText;
-
-
                 }
             };
             xhttp.open("GET", "/sword_toogle", true);
@@ -124,9 +135,19 @@ const char dash[] =R"rawliteral(<!DOCTYPE HTML>
             };
             xhttp.open("GET", "/ir_pir_sensor", true);
             xhttp.send();
-        }, 500);
+        }, 1000);
 
-
+        function promijeni_postotak() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("probability").innerHTML =
+                        this.responseText;
+                }
+            };
+            xhttp.open("GET", "/change_probability?p=" + document.getElementById("new_probability").value, true);
+            xhttp.send();
+        }
 
     </script>
 </body>

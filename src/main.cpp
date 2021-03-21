@@ -2,7 +2,7 @@
 #include "server_setup.h"
 #include "wifi_setup.h"
 
-#define DEBUG false
+#define DEBUG true
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial

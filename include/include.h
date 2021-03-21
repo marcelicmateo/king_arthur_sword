@@ -10,7 +10,7 @@
 
 bool all_pass{false}; //defines user unlock
 
-unsigned char probability_to_pass{20}; // probability to pass
+unsigned int probability_to_pass{20}; // probability to pass
 
 
 Servo motor;
