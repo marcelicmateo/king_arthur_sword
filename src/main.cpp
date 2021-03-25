@@ -12,8 +12,10 @@ void setup() {
   // defining pin modes
   pinMode(PIR_SENSOR, INPUT);
   pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
+  pinMode(PIN_IN, INPUT_PULLUP);
+  pinMode(PIN_OUT, INPUT_PULLUP);
   motor.attach(STEPER_MOTOR);
-  motor.write(motor_position);
+  unlock_sword();
 
   wifi_setup();
   server_setup();
@@ -64,22 +66,23 @@ bool random_chance_to_release() {
 }
 
 void lock_sword() {
-  if (motor_position == locked_position)
-    return;
-
   Serial.println("Locking sword");
-  motor_position = locked_position;
-  motor.write(motor_position);
-  Serial.println("Sword Locked");
+  while (digitalRead(PIN_IN)) {
+    motor.write(motor_unlock);
+  }
+  motor.write(motor_stop);
+  Serial.println("Sword locked");
+
   return;
 }
 void unlock_sword() {
-  if (motor_position == unlocked_position)
-    return;
 
   Serial.println("Unlocking sword");
-  motor_position = unlocked_position;
-  motor.write(motor_position);
+  while (digitalRead(PIN_OUT)) {
+    motor.write(motor_unlock);
+  }
+  motor.write(motor_stop);
   Serial.println("Sword unlocked");
+
   return;
 }
