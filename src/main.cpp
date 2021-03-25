@@ -2,7 +2,7 @@
 #include "server_setup.h"
 #include "wifi_setup.h"
 
-#define DEBUG false
+#define DEBUG true
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
@@ -68,7 +68,8 @@ bool random_chance_to_release() {
 void lock_sword() {
   Serial.println("Locking sword");
   while (digitalRead(PIN_IN)) {
-    motor.write(motor_unlock);
+    motor.write(motor_lock);
+    yield(); // prevents WDT reset on blocking while function
   }
   motor.write(motor_stop);
   Serial.println("Sword locked");
@@ -78,10 +79,13 @@ void lock_sword() {
 void unlock_sword() {
 
   Serial.println("Unlocking sword");
+
   while (digitalRead(PIN_OUT)) {
     motor.write(motor_unlock);
+    yield(); // prevents WDT reset on blocking while function
   }
   motor.write(motor_stop);
+
   Serial.println("Sword unlocked");
 
   return;

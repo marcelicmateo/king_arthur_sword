@@ -3,7 +3,7 @@
 #include <Servo.h>
 
 #define PIR_SENSOR D1               // human sensor
-#define INFRARED_OBSTICLE_SENSOR D2 // sword sensor
+#define INFRARED_OBSTICLE_SENSOR D2 // sword sensor, inverted logic
 #define STEPER_MOTOR D5             // steper control
 
 #define PIN_IN D7  // PULLUP, reverse logic
