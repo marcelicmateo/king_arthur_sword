@@ -69,3 +69,8 @@ fp-info-cache
 
 #automatic generated files
 include/dash.h
+
+
+cad/*.FCStd1
+cad/*.stl
+
