@@ -65,7 +65,7 @@ NoConn ~ 4650 4650
 NoConn ~ 4650 4750
 NoConn ~ 4650 5050
 Text Notes 4700 3100 0    59   ~ 0
-\n#define PIR_SENSOR D1 // human sensor\n#define INFRARED_OBSTICLE_SENSOR D2 // sword sensor\n#define STEPER_MOTOR D5 // steper control\n
+#define PIR_SENSOR D1 // human sensor\n#define INFRARED_OBSTICLE_SENSOR D2 // sword sensor, reverse logic\n#define STEPER_MOTOR D5 // steper control\n\n\n#define PIN_IN D7  // PULLUP, reverse logic\n#define PIN_OUT D6 // PULLUP, reverse logic
 $Comp
 L ESP8266:NodeMCU_1.0_(ESP-12E) U2
 U 1 1 605DF9BB
@@ -325,10 +325,10 @@ Wire Wire Line
 Wire Wire Line
 	4150 4150 3500 4150
 $Comp
-L Connector:Conn_01x03_Female J?
+L Connector:Conn_01x03_Female J5
 U 1 1 6062B731
 P 2500 6350
-F 0 "J?" H 2392 6025 50  0000 C CNN
+F 0 "J5" H 2392 6025 50  0000 C CNN
 F 1 "Descrete sensor of SWORD block pin state" H 1700 6700 50  0000 C CNN
 F 2 "" H 2500 6350 50  0001 C CNN
 F 3 "~" H 2500 6350 50  0001 C CNN
@@ -336,10 +336,10 @@ F 3 "~" H 2500 6350 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L cus:GND #PWR?
+L cus:GND #PWR013
 U 1 1 6062FD64
 P 3250 6400
-F 0 "#PWR?" H 3250 6150 50  0001 C CNN
+F 0 "#PWR013" H 3250 6150 50  0001 C CNN
 F 1 "GND" H 3255 6227 50  0000 C CNN
 F 2 "" H 3250 6400 50  0001 C CNN
 F 3 "" H 3250 6400 50  0001 C CNN
