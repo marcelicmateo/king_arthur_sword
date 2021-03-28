@@ -24,21 +24,6 @@ F 3 "" H 6550 3800 50  0001 C CNN
 	1    6550 3800
 	1    0    0    -1  
 $EndComp
-$Comp
-L cus:+5V #PWR03
-U 1 1 605E2DCB
-P 6550 3600
-F 0 "#PWR03" H 6550 3450 50  0001 C CNN
-F 1 "+5V" H 6565 3773 50  0000 C CNN
-F 2 "" H 6550 3600 50  0001 C CNN
-F 3 "" H 6550 3600 50  0001 C CNN
-	1    6550 3600
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6550 3600 6550 3650
-Wire Wire Line
-	6550 3650 6250 3650
 Wire Wire Line
 	6250 3750 6550 3750
 Wire Wire Line
@@ -311,8 +296,6 @@ F 3 "" H 2200 1350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1550 1150 2200 1150
-Wire Wire Line
 	2200 1150 2200 1050
 Wire Wire Line
 	2200 1350 2200 1250
@@ -358,4 +341,34 @@ Text GLabel 2700 6250 2    59   Input ~ 0
 PIN_IN
 Text GLabel 2700 6450 2    59   Input ~ 0
 PIN_OUT
+Wire Wire Line
+	6550 3600 6550 3650
+$Comp
+L cus:+5V #PWR03
+U 1 1 605E2DCB
+P 6550 3600
+F 0 "#PWR03" H 6550 3450 50  0001 C CNN
+F 1 "+5V" H 6565 3773 50  0000 C CNN
+F 2 "" H 6550 3600 50  0001 C CNN
+F 3 "" H 6550 3600 50  0001 C CNN
+	1    6550 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6550 3650 6250 3650
+$Comp
+L Device:D D1
+U 1 1 605F67F1
+P 1900 1150
+F 0 "D1" H 1900 933 50  0000 C CNN
+F 1 "D" H 1900 1024 50  0000 C CNN
+F 2 "" H 1900 1150 50  0001 C CNN
+F 3 "~" H 1900 1150 50  0001 C CNN
+	1    1900 1150
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1550 1150 1750 1150
+Wire Wire Line
+	2050 1150 2200 1150
 $EndSCHEMATC

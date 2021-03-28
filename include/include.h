@@ -2,21 +2,21 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#define PIR_SENSOR D1               // human sensor
-#define INFRARED_OBSTICLE_SENSOR D2 // sword sensor, inverted logic
-#define STEPER_MOTOR D5             // steper control
+#define PIR_SENSOR D7               // human sensor
+#define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic
+#define STEPER_MOTOR D6             // steper control
 
-#define PIN_IN D7  // PULLUP, reverse logic
-#define PIN_OUT D6 // PULLUP, reverse logic
+#define PIN_IN D1  
+#define PIN_OUT D2 
 
 bool all_pass{false}; // defines user unlock
 
-unsigned int probability_to_pass{20}; // probability to pass
+unsigned int probability_to_pass{100}; // probability to pass
 
 Servo motor;
 int motor_lock{180};
-int motor_unlock{180};
-int motor_stop{0};
+int motor_unlock{0};
+int motor_stop{90};
 
 bool is_sword_present();
 bool is_human_detected();

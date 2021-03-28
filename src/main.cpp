@@ -2,18 +2,20 @@
 #include "server_setup.h"
 #include "wifi_setup.h"
 
-#define DEBUG true
+#define DEBUG false
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   // defining pin modes
   pinMode(PIR_SENSOR, INPUT);
   pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
-  pinMode(PIN_IN, INPUT_PULLUP);
-  pinMode(PIN_OUT, INPUT_PULLUP);
+  pinMode(PIN_IN, INPUT);
+  pinMode(PIN_OUT, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
   motor.attach(STEPER_MOTOR);
   unlock_sword();
 
@@ -23,7 +25,7 @@ void setup() {
 }
 
 void loop() {
-
+  AsyncElegantOTA.loop();
   if (is_sword_present()) {
     Serial.println("Sword detected");
     if (!all_pass) {
@@ -37,6 +39,7 @@ void loop() {
       unlock_sword();
     }
   }
+  delayMicroseconds(200);
 }
 
 bool is_sword_present() {
@@ -45,7 +48,6 @@ bool is_sword_present() {
       1; // negative logic senor so XOR for positive logic
   return b;
 }
-
 bool is_human_detected() {
   static bool b{false};
   b = (bool)digitalRead(PIR_SENSOR);
@@ -67,7 +69,7 @@ bool random_chance_to_release() {
 
 void lock_sword() {
   Serial.println("Locking sword");
-  while (digitalRead(PIN_IN)) {
+  while (!digitalRead(PIN_IN)) {
     motor.write(motor_lock);
     yield(); // prevents WDT reset on blocking while function
   }
@@ -80,7 +82,7 @@ void unlock_sword() {
 
   Serial.println("Unlocking sword");
 
-  while (digitalRead(PIN_OUT)) {
+  while (!digitalRead(PIN_OUT)) {
     motor.write(motor_unlock);
     yield(); // prevents WDT reset on blocking while function
   }

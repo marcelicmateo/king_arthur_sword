@@ -3,6 +3,7 @@
 #include "include.h"
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <AsyncElegantOTA.h>
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
@@ -71,6 +72,7 @@ void server_setup() {
               request->send_P(200, "text/plain", change_probability(request));
             });
 
+  AsyncElegantOTA.begin(&server);
   // Start server
   server.begin();
 }
