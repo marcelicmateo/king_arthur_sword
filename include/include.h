@@ -6,12 +6,13 @@
 #define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic
 #define STEPER_MOTOR D6             // steper control
 
-#define PIN_IN D1  
-#define PIN_OUT D2 
+#define PIN_IN D1
+#define PIN_OUT D2
 
 bool all_pass{false}; // defines user unlock
 
-unsigned int probability_to_pass{100}; // probability to pass
+unsigned int probability_to_pass{20}; // probability to pass
+int nacin_rada{3};                    // 3 nacina rada sustava
 
 Servo motor;
 int motor_lock{180};

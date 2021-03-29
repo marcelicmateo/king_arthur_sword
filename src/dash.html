@@ -90,11 +90,18 @@
 
     <div class="content">
         <div class="card">
-            <h2>Trajno Otkljucaj/Zakljucaj MAC u kamenu </h2>
-            <p class="state"><span id="lock_status">%STATUS_MAC%</span></p>
-            <button class="button" id="lock_command_button" onclick=sword_toogle()>Toogle</button>
+            <h2>Nacin rada sustava </h2>
+            <p class="state"><span id="status_nacin_rada">%NACIN_RADA%</span><span
+                    id="status_nacin_rada_raw">%NACIN_RADA%</span></p>
+            <p class="state"> <input id="novi_nacin_rada" type="number" max=3 min=1 defaultValue="3">
+                <button class="button" id="lock_command_button" onclick=nacin_rada()>Promijeni</button>
+            </p>
+            <p class=state><span style="font-weight: normal;">"1" - Mac upotpunosti OTKLJUCAN</span></p>
+            <p class=state><span style="font-weight: normal;">"2" - Mac upotpunosti ZAKLJUCAN</span></p>
+            <p class=state><span style="font-weight: normal;">"3" - Normalan nacin rada</span></p>
+
         </div>
-    </div>
+    </div>  
     <div class="content">
         <div class="card">
             <h2>Postotak Kraljeva</h2>
@@ -119,20 +126,27 @@
 
 
     <script>
-        function sword_toogle() {
+        function nacin_rada() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    if (this.responseText == '0') {
-                        document.getElementById("lock_status").innerHTML =
-                            "Zakljucan"
-                    } else {
-                        document.getElementById("lock_status").innerHTML =
-                            "Otkljucan"
-                    }
-                }
+                    switch (this.responseText) {
+                        case '1':
+                            document.getElementById("status_nacin_rada").innerHTML = "Mac Upotpunosti otkljucan";
+                            break;
+                        case '2':
+                            document.getElementById("status_nacin_rada").innerHTML = "Mac Zakljucan";
+                            break;
+                        case '3':
+                            document.getElementById("status_nacin_rada").innerHTML = "Normalan rad";
+                            break;
+                        default:
+                            document.getElementById("status_nacin_rada").innerHTML = "Error";
+                    };
+                    document.getElementById("status_nacin_rada_raw").innerHTML = this.responseText;
+                };
             };
-            xhttp.open("GET", "/sword_toogle", true);
+            xhttp.open("GET", "/promijeni_nacin_rada?p=" + document.getElementById("novi_nacin_rada").value, true);
             xhttp.send();
         };
 

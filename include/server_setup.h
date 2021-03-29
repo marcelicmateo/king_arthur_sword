@@ -7,18 +7,21 @@
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
-void notFound(AsyncWebServerRequest *request) {
+void notFound(AsyncWebServerRequest *request)
+{
   request->send(404, "text/plain", "Not found");
 }
 
-const char *sword_toogle() {
+const char *sword_toogle()
+{
   static char *c = (char *)&all_pass;
   all_pass = !all_pass;
   Serial.println(all_pass ? "Lock" : "Unlock");
   return c;
 }
 
-const char *ir_pir_state() {
+const char *ir_pir_state()
+{
   static String c;
   static bool ir{0}, pir{0};
   ir = !(bool)digitalRead(INFRARED_OBSTICLE_SENSOR);
@@ -27,7 +30,8 @@ const char *ir_pir_state() {
   return c.c_str();
 }
 
-const char *change_probability(AsyncWebServerRequest *request) {
+const char *change_probability(AsyncWebServerRequest *request)
+{
   static int new_value;
   new_value = request->getParam(0)->value().toInt();
   probability_to_pass = new_value;
@@ -35,23 +39,47 @@ const char *change_probability(AsyncWebServerRequest *request) {
   return request->getParam(0)->value().c_str();
 }
 
-String processor(const String &var) {
+const char *change_nacin_rada(AsyncWebServerRequest *request)
+{
+  static int new_value;
+  new_value = request->getParam(0)->value().toInt();
+  nacin_rada = new_value;
+  Serial.println("New value: " + (String)nacin_rada);
+  return request->getParam(0)->value().c_str();
+}
+
+String processor(const String &var)
+{
   // Serial.println(var);
-  if (var == "STATUS_MAC") {
+  if (var == "STATUS_MAC")
+  {
     return (all_pass ? (String)("Otkljucan") : (String)("Zakljucan"));
-  } else if (var == "STATUS_MAC_GUMB") {
+  }
+  else if (var == "STATUS_MAC_GUMB")
+  {
     return (all_pass ? (String)("Zakljucaj") : (String)("Otkljucaj"));
-  } else if (var == "PIR_SENSOR") {
+  }
+  else if (var == "PIR_SENSOR")
+  {
     return (String)(digitalRead(PIR_SENSOR) ? "TRUE" : "FALSE");
-  } else if (var == "IR_SENSOR") {
+  }
+  else if (var == "IR_SENSOR")
+  {
     return (String)(digitalRead(INFRARED_OBSTICLE_SENSOR) ? "TRUE" : "FALSE");
-  } else if (var == "POSTOTAK") {
+  }
+  else if (var == "POSTOTAK")
+  {
     return (String)probability_to_pass;
+  }
+  else if (var == "NACIN_RADA")
+  {
+    return (String)nacin_rada;
   }
   return String();
 }
 
-void server_setup() {
+void server_setup()
+{
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send_P(200, "text/html", dash, processor);
@@ -70,6 +98,11 @@ void server_setup() {
             [](AsyncWebServerRequest *request) {
               Serial.println("GET: Change Probability");
               request->send_P(200, "text/plain", change_probability(request));
+            });
+  server.on("/promijeni_nacin_rada", HTTP_GET,
+            [](AsyncWebServerRequest *request) {
+              Serial.println("GET: Change WORK");
+              request->send_P(200, "text/plain", change_nacin_rada(request));
             });
 
   AsyncElegantOTA.begin(&server);
