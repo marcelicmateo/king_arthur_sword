@@ -7,9 +7,9 @@
   if (DEBUG)   \
   Serial
 
-unsigned long current_milis = millis();
-unsigned long previous_milis = 0;
-const long interval = 5000; // interval at which to blink (milliseconds)
+//unsigned long current_milis = millis();
+//unsigned long previous_milis = 0;
+//const long interval = 5000; // interval at which to blink (milliseconds)
 
 void setup()
 {
@@ -20,10 +20,14 @@ void setup()
   pinMode(PIN_IN, INPUT);
   pinMode(PIN_OUT, INPUT);
   motor.attach(STEPER_MOTOR);
-  unlock_sword();
 
   wifi_setup();
   server_setup();
+
+  if (!lock_flag && !unlock_flag)
+  {
+    unlock_sword();
+  }
   Serial.println("Begin loop");
 }
 void motor_upotpunosti_otkljucan()
@@ -43,26 +47,41 @@ void motor_upotpunosti_zakljucan()
 void normalan_nacin_rada()
 {
   Serial.println("Normalan nacin rada");
-  if (is_sword_present())
+  static bool detection_flag{presistane_flag};
+  detection_flag = is_human_detected();
+
+  if (presistane_flag == false && detection_flag == true)
   {
-    lock_sword();
-    if (is_human_detected())
+    presistane_flag = true;
+    if (is_sword_present())
     {
+      lock_sword();
+
       if (random_chance_to_release())
       {
+        is_king = true;
         unlock_sword();
-        yield();
-        delay(5000);
+      }
+      else
+      {
+        is_king = false;
       }
     }
+  }
+  if (presistane_flag == true && detection_flag == false)
+  {
+    presistane_flag = false; // reset presistance flag
   }
   return;
 }
 
+unsigned long current_milis = millis();
+unsigned long previous_milis = 0;
+//const long interval = 5000; // interval at which to blink (milliseconds)
 void loop()
 {
-  AsyncElegantOTA.loop();
 
+  AsyncElegantOTA.loop();
   switch (nacin_rada)
   {
   case 1:
@@ -72,14 +91,22 @@ void loop()
     motor_upotpunosti_zakljucan();
     break;
   case 3:
-    normalan_nacin_rada();
+    current_milis = millis();
+    if (current_milis - previous_milis <= 1000)
+    {
+      yield();
+    }
+    else
+    {
+      previous_milis = current_milis;
+      normalan_nacin_rada();
+    }
     break;
   default:
     break;
   }
 
   yield();
-  delay(20);
 }
 
 bool is_sword_present()
@@ -91,18 +118,10 @@ bool is_sword_present()
 }
 bool is_human_detected()
 {
+  //static unsigned long current_milis = millis();
   static bool b{false};
   b = (bool)digitalRead(PIR_SENSOR);
-  if (b == true)
-  {
-    current_milis = millis();
-  }
-  if (current_milis - previous_milis >= interval)
-  {
-    // save the last time you blinked the LED
-    previous_milis = current_milis;
-    return false;
-  }
+
   return b;
 }
 
@@ -112,6 +131,7 @@ bool random_chance_to_release()
   static bool b{false};
   static unsigned int chance{0};
   chance = rand() % MAX_RANDOM_NUMBER;
+  random_number_holder = chance;
   Serial.println("Chance to be a king: " + (String)chance);
   if (chance < probability_to_pass)
     b = true;
@@ -124,23 +144,33 @@ void lock_sword()
 {
   bool b{0};
   b = digitalRead(PIN_IN);
-  if (b == HIGH)
+  if (lock_flag == true)
   {
     Serial.println("Sword already locked");
-    motor.write(motor_stop);
+    motor.writeMicroseconds(motor_stop);
   }
   else
   {
     Serial.println("Locking sword");
-    motor.write(motor_lock);
+    motor.writeMicroseconds(motor_lock);
     b = digitalRead(PIN_IN);
     while (b == LOW)
     {
       b = digitalRead(PIN_IN);
       yield();
     }
-    motor.write(motor_stop);
+
+    motor.writeMicroseconds(1800);
+    yield();
+    delay(100);
+    motor.writeMicroseconds(motor_stop + 100);
+    yield();
+    delay(100);
+    motor.writeMicroseconds(motor_stop);
+    motor.writeMicroseconds(motor_stop);
   }
+  unlock_flag = false;
+  lock_flag = true;
   Serial.println("Sword locked");
 
   return;
@@ -149,23 +179,32 @@ void unlock_sword()
 {
   bool b{0};
   b = digitalRead(PIN_OUT);
-  if (b == HIGH)
+  if (unlock_flag == true)
   {
     Serial.println("Sword already unlocked");
-    motor.write(motor_stop);
+    motor.writeMicroseconds(motor_stop);
   }
   else
   {
     Serial.println("Unlocking sword");
-    motor.write(motor_unlock);
+    motor.writeMicroseconds(motor_unlock);
     b = digitalRead(PIN_OUT);
     while (b == LOW)
     {
       b = digitalRead(PIN_OUT);
       yield();
     }
-    motor.write(motor_stop);
+
+    motor.writeMicroseconds(1200);
+    yield();
+    delay(50);
+    motor.writeMicroseconds(motor_stop - 100);
+    yield();
+    delay(100);
+    motor.writeMicroseconds(motor_stop);
   }
+  unlock_flag = true;
+  lock_flag = false;
   Serial.println("Sword unlocked");
 
   return;

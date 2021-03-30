@@ -101,7 +101,7 @@
             <p class=state><span style="font-weight: normal;">"3" - Normalan nacin rada</span></p>
 
         </div>
-    </div>  
+    </div>
     <div class="content">
         <div class="card">
             <h2>Postotak Kraljeva</h2>
@@ -120,6 +120,10 @@
                     style="background-color:lightcoral;">%PIR_SENSOR%</span></p>
             <p class="state"><span>Mac u kamenu:</span> <span id=ir_sensor
                     style="background-color:lightcoral;">%IR_SENSOR%</span></p>
+            <p class="state"><span>Lock flag:</span> <span id=lock_flag
+                    style="background-color:rgb(141, 139, 255);"></span></p>
+            <p class="state"><span>Unlock flag:</span> <span id=unlock_flag
+                    style="background-color:rgb(205, 231, 143);"></span></p>
         </div>
     </div>
 
@@ -172,6 +176,9 @@
                         document.getElementById('ir_sensor').setAttribute('style', 'background-color:greenyellow');
                         document.getElementById("ir_sensor").innerHTML = "TRUE";
                     }
+                    document.getElementById('lock_flag').innerHTML = ir_pir[3];
+                    document.getElementById('unlock_flag').innerHTML = ir_pir[4];
+
                 }
             };
             xhttp.open("GET", "/ir_pir_sensor", true);

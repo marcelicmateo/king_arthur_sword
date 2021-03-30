@@ -24,9 +24,9 @@ const char *ir_pir_state()
 {
   static String c;
   static bool ir{0}, pir{0};
-  ir = !(bool)digitalRead(INFRARED_OBSTICLE_SENSOR);
-  pir = (bool)digitalRead(PIR_SENSOR);
-  c = (String)ir + ";" + (String)pir;
+  ir = is_sword_present();
+  pir = presistane_flag;
+  c = (String)ir + ";" + (String)pir + ";" + (String)lock_flag + "+" + (String)unlock_flag;
   return c.c_str();
 }
 
