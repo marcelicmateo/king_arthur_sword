@@ -7,10 +7,6 @@
   if (DEBUG)   \
   Serial
 
-//unsigned long current_milis = millis();
-//unsigned long previous_milis = 0;
-//const long interval = 5000; // interval at which to blink (milliseconds)
-
 void setup()
 {
   Serial.begin(9600);
@@ -30,6 +26,7 @@ void setup()
   }
   Serial.println("Begin loop");
 }
+
 void motor_upotpunosti_otkljucan()
 {
   Serial.println("Nacin rada 1");
@@ -56,7 +53,6 @@ void normalan_nacin_rada()
     if (is_sword_present())
     {
       lock_sword();
-
       if (random_chance_to_release())
       {
         is_king = true;
@@ -77,7 +73,7 @@ void normalan_nacin_rada()
 
 unsigned long current_milis = millis();
 unsigned long previous_milis = 0;
-//const long interval = 5000; // interval at which to blink (milliseconds)
+
 void loop()
 {
 
@@ -116,6 +112,7 @@ bool is_sword_present()
       1; // negative logic senor so XOR for positive logic
   return b;
 }
+
 bool is_human_detected()
 {
   //static unsigned long current_milis = millis();
@@ -175,6 +172,7 @@ void lock_sword()
 
   return;
 }
+
 void unlock_sword()
 {
   bool b{0};
