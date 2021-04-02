@@ -33,8 +33,8 @@ const char *change_probability(AsyncWebServerRequest *request) {
 const char *change_nacin_rada(AsyncWebServerRequest *request) {
   static int new_value;
   new_value = request->getParam(0)->value().toInt();
-  nacin_rada = new_value;
-  Serial.println("New value: " + (String)nacin_rada);
+  state = new_value;
+  Serial.println("New value: " + (String)state);
   return request->getParam(0)->value().c_str();
 }
 
@@ -51,7 +51,7 @@ String processor(const String &var) {
   } else if (var == "POSTOTAK") {
     return (String)probability_to_pass;
   } else if (var == "NACIN_RADA") {
-    return (String)nacin_rada;
+    return (String)state;
   }
   return String();
 }
