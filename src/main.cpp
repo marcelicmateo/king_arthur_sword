@@ -3,12 +3,11 @@
 #include "wifi_setup.h"
 
 #define DEBUG false
-#define Serial \
-  if (DEBUG)   \
+#define Serial                                                                 \
+  if (DEBUG)                                                                   \
   Serial
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
   //   defining pin modes
   pinMode(PIR_SENSOR, INPUT);
@@ -20,52 +19,42 @@ void setup()
   wifi_setup();
   server_setup();
 
-  if (!lock_flag && !unlock_flag)
-  {
+  if (!lock_flag && !unlock_flag) {
     unlock_sword();
   }
   Serial.println("Begin loop");
 }
 
-void motor_upotpunosti_otkljucan()
-{
+void motor_upotpunosti_otkljucan() {
   Serial.println("Nacin rada 1");
   unlock_sword();
   return;
 }
 
-void motor_upotpunosti_zakljucan()
-{
+void motor_upotpunosti_zakljucan() {
   Serial.println("Nacin rada 2");
   lock_sword();
   return;
 }
 
-void normalan_nacin_rada()
-{
+void normalan_nacin_rada() {
   Serial.println("Normalan nacin rada");
   static bool detection_flag{presistane_flag};
   detection_flag = is_human_detected();
 
-  if (presistane_flag == false && detection_flag == true)
-  {
+  if (presistane_flag == false && detection_flag == true) {
     presistane_flag = true;
-    if (is_sword_present())
-    {
+    if (is_sword_present()) {
       lock_sword();
-      if (random_chance_to_release())
-      {
+      if (random_chance_to_release()) {
         is_king = true;
         unlock_sword();
-      }
-      else
-      {
+      } else {
         is_king = false;
       }
     }
   }
-  if (presistane_flag == true && detection_flag == false)
-  {
+  if (presistane_flag == true && detection_flag == false) {
     presistane_flag = false; // reset presistance flag
   }
   return;
@@ -74,12 +63,10 @@ void normalan_nacin_rada()
 unsigned long current_milis = millis();
 unsigned long previous_milis = 0;
 
-void loop()
-{
+void loop() {
 
   AsyncElegantOTA.loop();
-  switch (nacin_rada)
-  {
+  switch (nacin_rada) {
   case 1:
     motor_upotpunosti_otkljucan();
     break;
@@ -88,12 +75,9 @@ void loop()
     break;
   case 3:
     current_milis = millis();
-    if (current_milis - previous_milis <= 1000)
-    {
+    if (current_milis - previous_milis <= 1000) {
       yield();
-    }
-    else
-    {
+    } else {
       previous_milis = current_milis;
       normalan_nacin_rada();
     }
@@ -105,25 +89,22 @@ void loop()
   yield();
 }
 
-bool is_sword_present()
-{
+bool is_sword_present() {
   static bool b{true};
   b = (bool)digitalRead(INFRARED_OBSTICLE_SENSOR) ^
       1; // negative logic senor so XOR for positive logic
   return b;
 }
 
-bool is_human_detected()
-{
-  //static unsigned long current_milis = millis();
+bool is_human_detected() {
+  // static unsigned long current_milis = millis();
   static bool b{false};
   b = (bool)digitalRead(PIR_SENSOR);
 
   return b;
 }
 
-bool random_chance_to_release()
-{
+bool random_chance_to_release() {
   constexpr int MAX_RANDOM_NUMBER{99}; // constant
   static bool b{false};
   static unsigned int chance{0};
@@ -137,22 +118,17 @@ bool random_chance_to_release()
   return b;
 }
 
-void lock_sword()
-{
+void lock_sword() {
   bool b{0};
   b = digitalRead(PIN_IN);
-  if (lock_flag == true)
-  {
+  if (lock_flag == true) {
     Serial.println("Sword already locked");
     motor.writeMicroseconds(motor_stop);
-  }
-  else
-  {
+  } else {
     Serial.println("Locking sword");
     motor.writeMicroseconds(motor_lock);
     b = digitalRead(PIN_IN);
-    while (b == LOW)
-    {
+    while (b == LOW) {
       b = digitalRead(PIN_IN);
       yield();
     }
@@ -173,22 +149,17 @@ void lock_sword()
   return;
 }
 
-void unlock_sword()
-{
+void unlock_sword() {
   bool b{0};
   b = digitalRead(PIN_OUT);
-  if (unlock_flag == true)
-  {
+  if (unlock_flag == true) {
     Serial.println("Sword already unlocked");
     motor.writeMicroseconds(motor_stop);
-  }
-  else
-  {
+  } else {
     Serial.println("Unlocking sword");
     motor.writeMicroseconds(motor_unlock);
     b = digitalRead(PIN_OUT);
-    while (b == LOW)
-    {
+    while (b == LOW) {
       b = digitalRead(PIN_OUT);
       yield();
     }

@@ -1,46 +1,36 @@
 #pragma once
+
 #include "dash.h"
 #include "include.h"
+
+#include <AsyncElegantOTA.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-#include <AsyncElegantOTA.h>
+
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
-void notFound(AsyncWebServerRequest *request)
-{
+void notFound(AsyncWebServerRequest *request) {
   request->send(404, "text/plain", "Not found");
 }
 
-const char *sword_toogle()
-{
-  static char *c = (char *)&all_pass;
-  all_pass = !all_pass;
-  Serial.println(all_pass ? "Lock" : "Unlock");
-  return c;
-}
-
-const char *ir_pir_state()
-{
+const char *ir_pir_state() {
   static String c;
   static bool ir{0}, pir{0};
   ir = is_sword_present();
   pir = presistane_flag;
-  c = (String)ir + ";" + (String)pir + ";" + (String)lock_flag + "+" + (String)unlock_flag;
+  c = (String)ir + ";" + (String)pir + ";" + (String)lock_flag + "+" +
+      (String)unlock_flag;
   return c.c_str();
 }
 
-const char *change_probability(AsyncWebServerRequest *request)
-{
-  static int new_value;
-  new_value = request->getParam(0)->value().toInt();
-  probability_to_pass = new_value;
+const char *change_probability(AsyncWebServerRequest *request) {
+  probability_to_pass = request->getParam(0)->value().toInt();
   Serial.println("New value: " + (String)probability_to_pass);
   return request->getParam(0)->value().c_str();
 }
 
-const char *change_nacin_rada(AsyncWebServerRequest *request)
-{
+const char *change_nacin_rada(AsyncWebServerRequest *request) {
   static int new_value;
   new_value = request->getParam(0)->value().toInt();
   nacin_rada = new_value;
@@ -48,63 +38,48 @@ const char *change_nacin_rada(AsyncWebServerRequest *request)
   return request->getParam(0)->value().c_str();
 }
 
-String processor(const String &var)
-{
-  // Serial.println(var);
-  if (var == "STATUS_MAC")
-  {
+String processor(const String &var) {
+  // replace place holder values in HTML page
+  if (var == "STATUS_MAC") {
     return (all_pass ? (String)("Otkljucan") : (String)("Zakljucan"));
-  }
-  else if (var == "STATUS_MAC_GUMB")
-  {
+  } else if (var == "STATUS_MAC_GUMB") {
     return (all_pass ? (String)("Zakljucaj") : (String)("Otkljucaj"));
-  }
-  else if (var == "PIR_SENSOR")
-  {
+  } else if (var == "PIR_SENSOR") {
     return (String)(digitalRead(PIR_SENSOR) ? "TRUE" : "FALSE");
-  }
-  else if (var == "IR_SENSOR")
-  {
+  } else if (var == "IR_SENSOR") {
     return (String)(digitalRead(INFRARED_OBSTICLE_SENSOR) ? "TRUE" : "FALSE");
-  }
-  else if (var == "POSTOTAK")
-  {
+  } else if (var == "POSTOTAK") {
     return (String)probability_to_pass;
-  }
-  else if (var == "NACIN_RADA")
-  {
+  } else if (var == "NACIN_RADA") {
     return (String)nacin_rada;
   }
   return String();
 }
 
-void server_setup()
-{
-  // Route for root / web page
+void server_setup() {
+  // root page, main dashboard
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send_P(200, "text/html", dash, processor);
   });
-
-  server.on("/sword_toogle", HTTP_GET, [](AsyncWebServerRequest *request) {
-    Serial.println("GET: Sword-Toogle");
-    request->send_P(200, "text/plain", sword_toogle());
-  });
+  // GET ir and pir sensor readings, interval of .5s
   server.on("/ir_pir_sensor", HTTP_GET, [](AsyncWebServerRequest *request) {
     Serial.println("GET: IR and Pir sensor");
     request->send_P(200, "text/plain", ir_pir_state());
   });
-
+  // change probability of unlocking a sword
   server.on("/change_probability", HTTP_GET,
             [](AsyncWebServerRequest *request) {
               Serial.println("GET: Change Probability");
               request->send_P(200, "text/plain", change_probability(request));
             });
+  // change working mode of program logic
   server.on("/promijeni_nacin_rada", HTTP_GET,
             [](AsyncWebServerRequest *request) {
               Serial.println("GET: Change WORK");
               request->send_P(200, "text/plain", change_nacin_rada(request));
             });
 
+  // OTA update server
   AsyncElegantOTA.begin(&server);
   // Start server
   server.begin();
