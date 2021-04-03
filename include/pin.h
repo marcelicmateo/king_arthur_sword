@@ -7,6 +7,5 @@ void init_gpio() {
   pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
   pinMode(PIN_IN, INPUT);
   pinMode(PIN_OUT, INPUT);
-  motor.attach(STEPER_MOTOR);
   return;
 }

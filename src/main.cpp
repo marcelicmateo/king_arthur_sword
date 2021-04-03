@@ -1,17 +1,21 @@
+#include "error.h"
 #include "include.h"
+#include "pin.h"
 #include "server_setup.h"
 #include "wifi_setup.h"
 
-#define DEBUG false
+#define DEBUG true
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   //   defining pin modes
 
   init_gpio();
+  motor.attach(STEPER_MOTOR);
+
   wifi_setup();
   server_setup();
 
@@ -64,11 +68,11 @@ void loop() {
   AsyncElegantOTA.loop(); // service OTA updates
 
   switch (state) { // state machine
-  case 256:
+  case 255:
     // critical error, system halt
     Serial.println("Critical error, system halt");
     break;
-  case 255:
+  case 254:
     // lock error
     Serial.println("Sword cant be locked");
     break;
@@ -92,11 +96,14 @@ void loop() {
   default:
     // 0
     // should never come to this value
+    // wdt reset hapend
+    Serial.println("Error, reseting system");
     ESP.restart();
     break;
   }
 
   yield(); // let ESP do stuff
+  delay(200);
 }
 
 bool is_sword_present() {

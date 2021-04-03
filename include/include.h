@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Arduino.h>
 #include <Servo.h>
 
@@ -14,7 +15,7 @@ void init_gpio();
 bool all_pass{false}; // defines user unlock
 
 unsigned short int probability_to_pass{10}; // probability to pass
-char state{3};                              // 3 nacina rada sustava
+uint8_t state{3};                           // 3 nacina rada sustava
 
 Servo motor;
 

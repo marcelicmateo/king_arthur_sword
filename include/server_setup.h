@@ -19,7 +19,7 @@ const char *ir_pir_state() {
   static bool ir{0}, pir{0};
   ir = is_sword_present();
   pir = presistane_flag;
-  c = (String)ir + ";" + (String)pir + ";" + (String)lock_flag + "+" +
+  c = (String)ir + ";" + (String)pir + ";" + (String)lock_flag + ";" +
       (String)unlock_flag;
   return c.c_str();
 }
@@ -30,13 +30,13 @@ const char *change_probability(AsyncWebServerRequest *request) {
   return request->getParam(0)->value().c_str();
 }
 
-const char *change_nacin_rada(AsyncWebServerRequest *request) {
-  static int new_value;
-  new_value = request->getParam(0)->value().toInt();
-  state = new_value;
+const char *change_state(AsyncWebServerRequest *request) {
+  state = request->getParam(0)->value().toInt();
   Serial.println("New value: " + (String)state);
   return request->getParam(0)->value().c_str();
 }
+
+uint8_t *system_status() { return &state; }
 
 String processor(const String &var) {
   // replace place holder values in HTML page
@@ -52,6 +52,8 @@ String processor(const String &var) {
     return (String)probability_to_pass;
   } else if (var == "NACIN_RADA") {
     return (String)state;
+  } else if (var == "SYSTEM_STATUS") {
+    return ((String)0);
   }
   return String();
 }
@@ -73,11 +75,15 @@ void server_setup() {
               request->send_P(200, "text/plain", change_probability(request));
             });
   // change working mode of program logic
-  server.on("/promijeni_nacin_rada", HTTP_GET,
-            [](AsyncWebServerRequest *request) {
-              Serial.println("GET: Change WORK");
-              request->send_P(200, "text/plain", change_nacin_rada(request));
-            });
+  server.on("/change_state", HTTP_GET, [](AsyncWebServerRequest *request) {
+    Serial.println("GET: Change WORK");
+    request->send_P(200, "text/plain", change_state(request));
+  });
+
+  server.on("/system_status", HTTP_GET, [](AsyncWebServerRequest *request) {
+    Serial.println("GET: system_status");
+    request->send_P(200, "text/plain", system_status(), 1);
+  });
 
   // OTA update server
   AsyncElegantOTA.begin(&server);

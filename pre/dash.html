@@ -3,7 +3,7 @@
 
 <head>
     <title> Kralj Artur </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <style>
         html {
             font-family: Arial, Helvetica, sans-serif;
@@ -62,13 +62,7 @@
             border-color: #6aa6a6;
         }
 
-        /*.button:hover {background-color: #0f8b8d}*/
-        .button:active {
-            background-color: #0f8b8d;
-            box-shadow: 2 2px #CDCDCD;
-            transform: translateY(2px);
-            margin-top: 5px;
-        }
+
 
         .state {
             font-size: 1.5rem;
@@ -80,25 +74,45 @@
             border-radius: 5px;
             padding: 2px
         }
+
+        .status_sustava {
+            color: dimgray;
+        }
+
+        .select {
+            padding: 7px 40px 7px 12px;
+            width: 95%;
+            border: 1px solid #3e6fb8;
+            border-radius: 5px;
+            background: inherit;
+            box-shadow: 0 1px 3px -2px;
+            appearance: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
     <div class="topnav">
         <h1>Kontrola Mehanizma</h1>
+        <p class="state"><span class='status_sustava'> Status sustava: </span><span class='status_sustava'
+                id="system_status">%SYSTEM_STATUS%</span></p>
     </div>
 
     <div class="content">
         <div class="card">
             <h2>Nacin rada sustava </h2>
-            <p class="state"><span id="status_nacin_rada">%NACIN_RADA%</span><span
-                    id="status_nacin_rada_raw">%NACIN_RADA%</span></p>
-            <p class="state"> <input id="novi_nacin_rada" type="number" max=3 min=1 defaultValue="3">
-                <button class="button" id="lock_command_button" onclick=nacin_rada()>Promijeni</button>
+            <p class="state" id="status_nacin_rada"><span>%NACIN_RADA%</span></p>
+            <p class="state">
+                <select class="select" id="new_state">
+                    <option value=1>1 - Mac upotpunosti OTKLJUCAN</option>
+                    <option value=2>2 - Mac upotpunosti ZAKLJUCAN</option>
+                    <option value=3>3 - Normalan nacin rada </option>
+                </select>
+                <input <input="" type="submit" value="Promijeni" class="button" id="lock_command_button"
+                    onclick="change_state()">
             </p>
-            <p class=state><span style="font-weight: normal;">"1" - Mac upotpunosti OTKLJUCAN</span></p>
-            <p class=state><span style="font-weight: normal;">"2" - Mac upotpunosti ZAKLJUCAN</span></p>
-            <p class=state><span style="font-weight: normal;">"3" - Normalan nacin rada</span></p>
+
 
         </div>
     </div>
@@ -130,27 +144,48 @@
 
 
     <script>
-        function nacin_rada() {
+        setInterval(
+            function () {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        switch (this.responseText) {
+                            case '1':
+                                document.getElementById("system_status").innerHTML = "Critical Error: Motor stuck";
+                                break;
+                            case '3':
+                                document.getElementById("system_status").innerHTML = "Error: Cant lock sword";
+                                break;
+                            default:
+                                document.getElementById("system_status").innerHTML = "OK";
+                                break;
+                        }
+                    };
+                };
+                xhttp.open("GET", "/system_status", true);
+                xhttp.send();
+            }, 500);
+
+        function change_state() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     switch (this.responseText) {
                         case '1':
-                            document.getElementById("status_nacin_rada").innerHTML = "Mac Upotpunosti otkljucan";
+                            document.getElementById("status_nacin_rada").innerHTML = "1 - Mac Upotpunosti otkljucan";
                             break;
                         case '2':
-                            document.getElementById("status_nacin_rada").innerHTML = "Mac Zakljucan";
+                            document.getElementById("status_nacin_rada").innerHTML = "2 - Mac Zakljucan";
                             break;
                         case '3':
-                            document.getElementById("status_nacin_rada").innerHTML = "Normalan rad";
+                            document.getElementById("status_nacin_rada").innerHTML = "3 - Normalan rad";
                             break;
                         default:
                             document.getElementById("status_nacin_rada").innerHTML = "Error";
                     };
-                    document.getElementById("status_nacin_rada_raw").innerHTML = this.responseText;
                 };
             };
-            xhttp.open("GET", "/promijeni_nacin_rada?p=" + document.getElementById("novi_nacin_rada").value, true);
+            xhttp.open("GET", "/change_state?p=" + document.getElementById("new_state").value, true);
             xhttp.send();
         };
 
@@ -176,8 +211,8 @@
                         document.getElementById('ir_sensor').setAttribute('style', 'background-color:greenyellow');
                         document.getElementById("ir_sensor").innerHTML = "TRUE";
                     }
-                    document.getElementById('lock_flag').innerHTML = ir_pir[3];
-                    document.getElementById('unlock_flag').innerHTML = ir_pir[4];
+                    document.getElementById('lock_flag').innerHTML = ir_pir[2];
+                    document.getElementById('unlock_flag').innerHTML = ir_pir[3];
 
                 }
             };
