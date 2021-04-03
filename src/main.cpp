@@ -10,12 +10,8 @@
 void setup() {
   Serial.begin(9600);
   //   defining pin modes
-  pinMode(PIR_SENSOR, INPUT);
-  pinMode(INFRARED_OBSTICLE_SENSOR, INPUT);
-  pinMode(PIN_IN, INPUT);
-  pinMode(PIN_OUT, INPUT);
-  motor.attach(STEPER_MOTOR);
 
+  init_gpio();
   wifi_setup();
   server_setup();
 

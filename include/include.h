@@ -2,9 +2,11 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#define PIR_SENSOR D7               // human sensor
+void init_gpio();
+
+#define PIR_SENSOR D7 // human sensor
 #define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic
-#define STEPER_MOTOR D6             // steper control
+#define STEPER_MOTOR D6 // steper control
 
 #define PIN_IN D2
 #define PIN_OUT D1
