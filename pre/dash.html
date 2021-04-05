@@ -3,7 +3,8 @@
 
 <head>
     <title> Kralj Artur </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="-8" />
     <style>
         html {
             font-family: Arial, Helvetica, sans-serif;
@@ -89,6 +90,16 @@
             appearance: none;
             font-weight: bold;
         }
+
+        .error_status {
+            display: none;
+            color: floralwhite;
+            background-color: firebrick;
+            font-weight: bold;
+            font-size: large;
+            justify-content: space-evenly;
+            flex-flow: wrap;
+        }
     </style>
 </head>
 
@@ -97,6 +108,10 @@
         <h1>Kontrola Mehanizma</h1>
         <p class="state"><span class='status_sustava'> Status sustava: </span><span class='status_sustava'
                 id="system_status">%SYSTEM_STATUS%</span></p>
+        <p id="error_status" class="error_status">
+            <span id="error_msg"></span>
+            <button class="err_button" onclick="exit_error()"> Reset</button>
+        </p>
     </div>
 
     <div class="content">
@@ -109,8 +124,7 @@
                     <option value=2>2 - Mac upotpunosti ZAKLJUCAN</option>
                     <option value=3>3 - Normalan nacin rada </option>
                 </select>
-                <input <input="" type="submit" value="Promijeni" class="button" id="lock_command_button"
-                    onclick="change_state()">
+                <button class="button" id="lock_command_button" onclick="change_state()">Promijeni</button>
             </p>
 
 
@@ -144,44 +158,94 @@
 
 
     <script>
+       
+        function exit_error() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    switch (this.responseText.charCodeAt(0)) {
+                        case 1:
+                            document.getElementById("status_nacin_rada").innerHTML = "1 - Mac Upotpunosti otkljucan";
+                            break;
+                        case 2:
+                            document.getElementById("status_nacin_rada").innerHTML = "2 - Mac Zakljucan";
+                            break;
+                        case 3:
+                            document.getElementById("status_nacin_rada").innerHTML = "3 - Normalan rad";
+                            break;
+                        case 126:
+                            document.getElementById("status_nacin_rada").innerHTML = "Error - Mac se nemoze zakljucati";
+                            break;
+                        case 127:
+                            document.getElementById("status_nacin_rada").innerHTML = "Critical error - motor stuck";
+                            break;
+                    };
+                    error_messages(this.responseText);
+                };
+            };
+            xhttp.open("GET", "/exit_error", true);
+            xhttp.send();
+        };
+
+
+
+        function error_messages(state) {
+            var msg = "";
+            document.getElementById("error_status").style.display = "flex";
+            switch (state) {
+                case 126:
+                    msg = "Sword cant be locked, please check and try again.";
+                    break;
+                case 127:
+                    msg = "Critical error, motor stuck, please check.";
+                    break;
+                default:
+                    msg = "";
+                    document.getElementById("error_status").style.display = "none";
+                    break;
+            }
+            document.getElementById('error_msg').innerHTML = msg;
+        };
         setInterval(
             function () {
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        switch (this.responseText) {
-                            case '1':
+                        var s = this.responseText.charCodeAt(0);
+                        switch (s) {
+                            case 127:
                                 document.getElementById("system_status").innerHTML = "Critical Error: Motor stuck";
                                 break;
-                            case '3':
+                            case 126:
                                 document.getElementById("system_status").innerHTML = "Error: Cant lock sword";
                                 break;
                             default:
                                 document.getElementById("system_status").innerHTML = "OK";
                                 break;
                         }
+                        error_messages(this.responseText.charCodeAt(0));
                     };
                 };
                 xhttp.open("GET", "/system_status", true);
                 xhttp.send();
             }, 500);
 
+
         function change_state() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    switch (this.responseText) {
-                        case '1':
+                    switch (this.responseText.charCodeAt(0)) {
+                        case 1:
                             document.getElementById("status_nacin_rada").innerHTML = "1 - Mac Upotpunosti otkljucan";
                             break;
-                        case '2':
+                        case 2:
                             document.getElementById("status_nacin_rada").innerHTML = "2 - Mac Zakljucan";
                             break;
-                        case '3':
+                        case 3:
                             document.getElementById("status_nacin_rada").innerHTML = "3 - Normalan rad";
                             break;
-                        default:
-                            document.getElementById("status_nacin_rada").innerHTML = "Error";
+
                     };
                 };
             };

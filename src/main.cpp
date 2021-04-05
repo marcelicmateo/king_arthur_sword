@@ -68,11 +68,11 @@ void loop() {
   AsyncElegantOTA.loop(); // service OTA updates
 
   switch (state) { // state machine
-  case 255:
+  case 127:
     // critical error, system halt
     Serial.println("Critical error, system halt");
     break;
-  case 254:
+  case 126:
     // lock error
     Serial.println("Sword cant be locked");
     break;
@@ -98,8 +98,8 @@ void loop() {
     // should never come to this value
     // wdt reset hapend
     Serial.println("Error, reseting system");
+    yield();
     ESP.restart();
-    break;
   }
 
   yield(); // let ESP do stuff

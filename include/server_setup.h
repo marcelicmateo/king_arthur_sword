@@ -30,10 +30,21 @@ const char *change_probability(AsyncWebServerRequest *request) {
   return request->getParam(0)->value().c_str();
 }
 
-const char *change_state(AsyncWebServerRequest *request) {
-  state = request->getParam(0)->value().toInt();
-  Serial.println("New value: " + (String)state);
-  return request->getParam(0)->value().c_str();
+uint8_t *change_state(AsyncWebServerRequest *request) {
+  Serial.println("State value: " + request->getParam(0)->value());
+  if (previousState == 0) {
+    // assures that only if not in error, state can be changed
+    state = request->getParam(0)->value().toInt();
+    Serial.println("New value: " + (String)state);
+    return &state;
+  } else
+    // return previous state of machine
+    return &state;
+}
+
+uint8_t *exit_error() {
+  system_restore_state();
+  return &state;
 }
 
 uint8_t *system_status() { return &state; }
@@ -76,13 +87,18 @@ void server_setup() {
             });
   // change working mode of program logic
   server.on("/change_state", HTTP_GET, [](AsyncWebServerRequest *request) {
-    Serial.println("GET: Change WORK");
-    request->send_P(200, "text/plain", change_state(request));
+    Serial.println("GET: Change state");
+    request->send_P(200, "text/plain", change_state(request), 1);
   });
 
   server.on("/system_status", HTTP_GET, [](AsyncWebServerRequest *request) {
     Serial.println("GET: system_status");
     request->send_P(200, "text/plain", system_status(), 1);
+  });
+
+  server.on("/exit_error", HTTP_GET, [](AsyncWebServerRequest *request) {
+    Serial.println("GET: exit_error");
+    request->send_P(200, "text/plain", exit_error(), 1);
   });
 
   // OTA update server
