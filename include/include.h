@@ -27,14 +27,11 @@ constexpr unsigned short int motor_move_time{1 * 1000};
 // function declaration
 bool is_sword_present();
 bool is_human_detected();
-bool random_chance_to_release();
 
 bool lock_flag{false};
 bool unlock_flag{false};
 
 bool presistane_flag{false};
-bool is_king{false};
-int random_number_holder{-1};
 
 bool lock_sword();
 bool unlock_sword();
@@ -47,3 +44,16 @@ bool flag_error_stuck{false};
 
 void error_motor_stuck();
 void error_motor_cant_lock();
+
+bool is_sword_present() {
+  // negative logic sensor
+  // mask 1st bit and flip
+  // explicit cast to bool for controll
+  return (bool)~(digitalRead(INFRARED_OBSTICLE_SENSOR) & 0b01);
+}
+
+bool is_human_detected() {
+  // read and return PIR sensor value
+  // explicit cast to bool for controll
+  return (bool)digitalRead(PIR_SENSOR) & 0b01;
+}
