@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LittleFS.h"
 #include <Arduino.h>
 #include <Servo.h>
 

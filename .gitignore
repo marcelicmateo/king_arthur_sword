@@ -74,3 +74,5 @@ include/dash.h
 cad/*.FCStd1
 cad/*.stl
 
+data/
+data/*
