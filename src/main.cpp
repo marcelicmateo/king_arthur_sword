@@ -28,11 +28,6 @@ void setup() {
     return;
   }
   get_bingo_data();
-  Serial.println("Contestans " + (String)numberOfContestants);
-  Serial.println("N of Winenrs: " + (String)numberOfWinnings);
-  for (int i = 0; i < numberOfWinnings; i++) {
-    Serial.println(winningNumbers[i]);
-  }
 
   wifi_setup();
   server_setup();

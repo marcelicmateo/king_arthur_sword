@@ -24,10 +24,15 @@ const char *ir_pir_state() {
   return c.c_str();
 }
 
-const char *change_probability(AsyncWebServerRequest *request) {
-  probability_to_pass = request->getParam(0)->value().toInt();
-  Serial.println("New value: " + (String)probability_to_pass);
-  return request->getParam(0)->value().c_str();
+const char *generate_new_bingo(AsyncWebServerRequest *request) {
+  static String buff{""};
+  numberOfContestants = request->getParam(0)->value().toInt();
+  numberOfWinnings = request->getParam(1)->value().toInt();
+  buff = generate_bingo_winners();
+  Serial.println("N of Contestans: " + (String)numberOfContestants);
+  Serial.println("N of Winners: " + (String)numberOfWinnings);
+  Serial.println("Sending back: " + buff);
+  return buff.c_str();
 }
 
 uint8_t *change_state(AsyncWebServerRequest *request) {
@@ -79,11 +84,11 @@ void server_setup() {
     Serial.println("GET: IR and Pir sensor");
     request->send_P(200, "text/plain", ir_pir_state());
   });
-  // change probability of unlocking a sword
-  server.on("/change_probability", HTTP_GET,
+  // New BINGO
+  server.on("/generate_new_bingo", HTTP_GET,
             [](AsyncWebServerRequest *request) {
-              Serial.println("GET: Change Probability");
-              request->send_P(200, "text/plain", change_probability(request));
+              Serial.println("GET: New BINGO");
+              request->send_P(200, "text/plain", generate_new_bingo(request));
             });
   // change working mode of program logic
   server.on("/change_state", HTTP_GET, [](AsyncWebServerRequest *request) {

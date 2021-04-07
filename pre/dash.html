@@ -110,7 +110,7 @@
                 id="system_status">%SYSTEM_STATUS%</span></p>
         <p id="error_status" class="error_status">
             <span id="error_msg"></span>
-            <button class="err_button" onclick="exit_error()"> Reset</button>
+            <button class="err_button" onclick="exit_error()">Reset</button>
         </p>
     </div>
 
@@ -122,7 +122,7 @@
                 <select class="select" id="new_state">
                     <option value=1>1 - Mac upotpunosti OTKLJUCAN</option>
                     <option value=2>2 - Mac upotpunosti ZAKLJUCAN</option>
-                    <option value=3>3 - Normalan nacin rada </option>
+                    <option value=3>3 - Play BINGO </option>
                 </select>
                 <button class="button" id="lock_command_button" onclick="change_state()">Promijeni</button>
             </p>
@@ -132,15 +132,29 @@
     </div>
     <div class="content">
         <div class="card">
-            <h2>Postotak Kraljeva</h2>
-            <p class="state"><span>Trenutni postotak: </span><span id="probability">%POSTOTAK% &#37;</span>
+            <h2>Play BINGO</h2>
+            <p class="state"><span>Broj Igraca: </span><span id=num_players>%NUMBER_OF_PLAYERS%</span>
             </p>
-            <p class="state">
-                <input id="new_probability" type="number" max=100 min=0 defaultValue="20">
-                <button class="button" id="submit_button" onclick=promijeni_postotak()>Promijeni</button>
-            </p>
+            <p class="state"><span>Broj dobitnika: </span><span id=num_winers>%NUMBER_OF_WINNERS%</span></p>
+            <p class="state"><span>Dobitni brojevi: </span><span id=win_numbers>%WINNING_NUMBERS%</span></p>
+            <p class="state"><span>Trenutni igrac: </span><span id=current_player>%CURRENT_PLAYER%</span> </p>
         </div>
     </div>
+    <div class="content">
+        <div class="card">
+            <h2>Generiraj novi BINGO</h2>
+
+            <p class="state">
+                <span>Broj Igraca: </span> <input id="new_number_of_players" type="number" max=1000 min=0
+                    defaultValue="100">
+            </p>
+            <p class="state"><span>Broj dobitnika: </span><input id="new_number_of_winners" type="number" max=50 min=0
+                    defaultValue="5">
+            </p>
+            <button class="button" id="submit_button" onclick=generate_new_bingo()>Generiraj</button>
+        </div>
+    </div>
+
     <div class="content">
         <div class="card">
             <h2></h2>
@@ -158,7 +172,7 @@
 
 
     <script>
-       
+
         function exit_error() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -171,7 +185,7 @@
                             document.getElementById("status_nacin_rada").innerHTML = "2 - Mac Zakljucan";
                             break;
                         case 3:
-                            document.getElementById("status_nacin_rada").innerHTML = "3 - Normalan rad";
+                            document.getElementById("status_nacin_rada").innerHTML = "3 - BINGO";
                             break;
                         case 126:
                             document.getElementById("status_nacin_rada").innerHTML = "Error - Mac se nemoze zakljucati";
@@ -243,7 +257,7 @@
                             document.getElementById("status_nacin_rada").innerHTML = "2 - Mac Zakljucan";
                             break;
                         case 3:
-                            document.getElementById("status_nacin_rada").innerHTML = "3 - Normalan rad";
+                            document.getElementById("status_nacin_rada").innerHTML = "3 - BINGO";
                             break;
 
                     };
@@ -284,15 +298,25 @@
             xhttp.send();
         }, 1000);
 
-        function promijeni_postotak() {
+        function generate_new_bingo() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("probability").innerHTML =
-                        this.responseText;
+                    var buf = this.responseText.split(";");
+                    buf.pop();
+                    document.getElementById('num_players').innerHTML = buf[0];
+                    document.getElementById('current_player').innerHTML = buf[1];
+                    document.getElementById('num_winers').innerHTML = buf.length - 2;
+                    var s = "";
+                    for (var i = 2; i < buf.length - 1; i++) {
+                        s += buf[i] + ", "
+                    }
+                    s += buf[i];
+                    document.getElementById('win_numbers').innerHTML = s;
+
                 }
             };
-            xhttp.open("GET", "/change_probability?p=" + document.getElementById("new_probability").value, true);
+            xhttp.open("GET", "/generate_new_bingo?p=" + document.getElementById("new_number_of_players").value + "&n=" + document.getElementById("new_number_of_winners").value, true);
             xhttp.send();
         }
 
