@@ -53,8 +53,17 @@ bool is_sword_present() {
   return (bool)~(digitalRead(INFRARED_OBSTICLE_SENSOR) & 0b01);
 }
 
-bool is_human_detected() {
+uint8 pir_states() {
+  // 01 -- risng edge, new human
+  // 10 -- falling edge, human is off
+  // 11 -- constatnt movement
+  // 00 -- no movement
   // read and return PIR sensor value
   // explicit cast to bool for controll
-  return (bool)digitalRead(PIR_SENSOR) & 0b01;
+  static uint8 pir_state{0};
+
+  pir_state = pir_state << 1;
+  pir_state = pir_state | (digitalRead(PIR_SENSOR) & 0b01);
+
+  return pir_state & 0b11; // only lover 2 byte are interesting
 }

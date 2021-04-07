@@ -73,5 +73,5 @@ void loop() {
   }
 
   yield(); // let ESP do stuff
-  delay(200);
+  delay(250);
 }
