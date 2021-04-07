@@ -33,11 +33,14 @@ String read_from_file(String file_name) {
 void generate_bingo_winners() {
   pinMode(A0, INPUT);
   randomSeed(analogRead(A0)); // random noise on adc for random seed
+  String buf{(String)numberOfContestants + ";"};
   Serial.println("Generated random numbers");
   for (int i = 0; i < numberOfWinnings; i++) {
     winningNumbers[i] = (int)random(1, numberOfContestants + 1);
     Serial.println((String)i + ": " + (String)winningNumbers[i]);
+    buf += (String)winningNumbers[i] + ";";
   }
+  write_to_file(buf, BINGO_DATA);
   return;
 }
 
