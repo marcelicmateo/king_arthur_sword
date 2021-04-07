@@ -54,8 +54,17 @@ uint8_t *exit_error() {
 
 uint8_t *system_status() { return &state; }
 
+String winning_numbers() {
+  String buf{""};
+  for (int i = 0; i < numberOfWinnings; i++) {
+    buf += (String)winningNumbers[i] + ";";
+  }
+  return buf;
+}
+
 String processor(const String &var) {
   // replace place holder values in HTML page
+
   if (var == "STATUS_MAC") {
     return (all_pass ? (String)("Otkljucan") : (String)("Zakljucan"));
   } else if (var == "STATUS_MAC_GUMB") {
@@ -64,13 +73,18 @@ String processor(const String &var) {
     return (String)(digitalRead(PIR_SENSOR) ? "TRUE" : "FALSE");
   } else if (var == "IR_SENSOR") {
     return (String)(digitalRead(INFRARED_OBSTICLE_SENSOR) ? "TRUE" : "FALSE");
-  } else if (var == "POSTOTAK") {
-    return (String)probability_to_pass;
   } else if (var == "NACIN_RADA") {
     return (String)state;
   } else if (var == "SYSTEM_STATUS") {
     return ((String)0);
-  }
+  } else if (var == "NUMBER_OF_PLAYERS") {
+    return (String)numberOfContestants;
+  } else if (var == "NUMBER_OF_WINNERS")
+    return (String)numberOfWinnings;
+  else if (var == "CURRENT_PLAYER")
+    return (String)currentPlayer;
+  else if (var == "WINNING_NUMBERS")
+    return winning_numbers();
   return String();
 }
 
