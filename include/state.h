@@ -1,7 +1,7 @@
 #pragma once
 #include "include.h"
 
-void sword_prema_unlocked() {
+void sword_prema_unlocked() { // state 1
   Serial.println("State1");
   unlock_sword();
   return;
@@ -13,4 +13,4 @@ void sword_prema_locked() {
   return;
 }
 
-void bingo(){};
+void play_bingo(){};
