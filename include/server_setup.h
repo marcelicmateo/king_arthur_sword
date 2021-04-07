@@ -56,9 +56,11 @@ uint8_t *system_status() { return &state; }
 
 String winning_numbers() {
   String buf{""};
-  for (int i = 0; i < numberOfWinnings; i++) {
-    buf += (String)winningNumbers[i] + ";";
+  int i{0};
+  for (i = 0; i < numberOfWinnings - 1; i++) {
+    buf += (String)winningNumbers[i] + ",";
   }
+  buf += winningNumbers[i];
   return buf;
 }
 
