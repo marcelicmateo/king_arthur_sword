@@ -30,7 +30,7 @@ void play_bingo() {
   switch (pir_states()) {
   case 0b01:
     // new human on platform
-    currentPlayer++;
+    change_current_player(currentPlayer + 1);
     if (is_player_winner()) {
       unlock_sword();
     }

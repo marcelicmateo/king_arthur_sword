@@ -4,6 +4,7 @@
 constexpr uint16 NUMBER_OF_WINNERS{50};
 
 constexpr char BINGO_DATA[]{"Bingo.txt"};
+constexpr char CURRENT_PLAYER_txt[]{"CurrentPlayer.txt"};
 
 uint16 numberOfContestants{0};
 uint16 numberOfWinnings{0};
@@ -44,10 +45,18 @@ void sort(int *a, int n) {
       }
 }
 
+void change_current_player(int c) {
+  currentPlayer = c;
+  write_to_file((String)currentPlayer, CURRENT_PLAYER_txt);
+  return;
+}
+
 String generate_bingo_winners() {
   pinMode(A0, INPUT);
+  // random noise on adc for random seed
   randomSeed(analogRead(A0));
-  currentPlayer = 0; // random noise on adc for random seed
+
+  change_current_player(0);
   String buf{(String)numberOfContestants + ";" + (String)currentPlayer + ";"};
   Serial.println("Generated random numbers");
   int tmp{0};
@@ -95,10 +104,8 @@ void get_bingo_data() {
     } else {
       if (j == 0) {
         numberOfContestants = buff.toInt();
-      } else if (j == 1) {
-        currentPlayer = buff.toInt();
       } else {
-        winningNumbers[j - 2] = buff.toInt();
+        winningNumbers[j - 1] = buff.toInt();
       }
       j++;
       buff = "";
@@ -107,8 +114,12 @@ void get_bingo_data() {
     Serial.println("j :  " + (String)j);
     Serial.println(
         "w Num: " +
-        (String)winningNumbers[j - 2]); // garbage on j == 0, take care
+        (String)winningNumbers[j - 1]); // garbage on j == 0, take care
   }
-  numberOfWinnings = j - 2;
+  numberOfWinnings = j - 1;
+
+  data = read_from_file(CURRENT_PLAYER_txt);
+  currentPlayer = data.toInt();
+  Serial.println("Current player: " + (data));
   return;
 }
