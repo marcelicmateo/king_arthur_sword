@@ -76,3 +76,6 @@ cad/*.stl
 
 data/
 data/*
+
+
+workspace.code-workspace
