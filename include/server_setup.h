@@ -20,7 +20,7 @@ const char *ir_pir_state() {
   ir = is_sword_present();
   pir = presistane_flag;
   c = (String)ir + ";" + (String)pir + ";" + (String)lock_flag + ";" +
-      (String)unlock_flag;
+      (String)unlock_flag + ';' + (String)currentPlayer;
   return c.c_str();
 }
 
