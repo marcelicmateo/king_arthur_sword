@@ -4,9 +4,9 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "Driver za Elektro Magent"
-Date "2021-02-22"
-Rev "1.0"
+Title "King Arthur sword"
+Date "2021-04-11"
+Rev "1.2"
 Comp "Mateo Marcelic"
 Comment1 ""
 Comment2 ""
@@ -50,14 +50,14 @@ NoConn ~ 4650 4650
 NoConn ~ 4650 4750
 NoConn ~ 4650 5050
 Text Notes 4700 3100 0    59   ~ 0
-#define PIR_SENSOR D1 // human sensor\n#define INFRARED_OBSTICLE_SENSOR D2 // sword sensor, reverse logic\n#define STEPER_MOTOR D5 // steper control\n\n\n#define PIN_IN D7  // PULLUP, reverse logic\n#define PIN_OUT D6 // PULLUP, reverse logic
+#define PIR_SENSOR D7 // human sensor\n#define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic\n#define STEPER_MOTOR D6 // steper control\n\n#define PIN_IN D2\n#define PIN_OUT D1
 $Comp
 L ESP8266:NodeMCU_1.0_(ESP-12E) U2
 U 1 1 605DF9BB
 P 5450 4350
 F 0 "U2" H 5450 3263 60  0000 C CNN
 F 1 "NodeMCU_1.0_(ESP-12E)" H 5450 3369 60  0000 C CNN
-F 2 "" H 4850 3500 60  0000 C CNN
+F 2 "ESP8266:ESP12F-Devkit-V3" H 4850 3500 60  0001 C CNN
 F 3 "" H 4850 3500 60  0000 C CNN
 	1    5450 4350
 	-1   0    0    1   
@@ -68,23 +68,11 @@ U 1 1 605EAD08
 P 3400 4200
 F 0 "U1" V 3736 4475 59  0000 C CNN
 F 1 "Logisshifter" V 3631 4475 59  0000 C CNN
-F 2 "" H 3400 4200 59  0001 C CNN
+F 2 "king_arthur:DIP-12_393_ELL" H 3400 4200 59  0001 C CNN
 F 3 "" H 3400 4200 59  0001 C CNN
 	1    3400 4200
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	3500 4650 4100 4650
-Wire Wire Line
-	4100 4650 4100 4950
-Wire Wire Line
-	4100 4950 4650 4950
-Wire Wire Line
-	4650 4850 4200 4850
-Wire Wire Line
-	4200 4850 4200 4550
-Wire Wire Line
-	4200 4550 3500 4550
 Wire Wire Line
 	4650 4450 4050 4450
 Wire Wire Line
@@ -137,7 +125,7 @@ U 1 1 605F4378
 P 1000 5450
 F 0 "J2" H 892 5125 50  0000 C CNN
 F 1 "PIR sensor" H 892 5216 50  0000 C CNN
-F 2 "" H 1000 5450 50  0001 C CNN
+F 2 "Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical" H 1000 5450 50  0001 C CNN
 F 3 "~" H 1000 5450 50  0001 C CNN
 	1    1000 5450
 	-1   0    0    1   
@@ -148,7 +136,7 @@ U 1 1 605F7B6F
 P 1000 6150
 F 0 "J3" H 892 5825 50  0000 C CNN
 F 1 "IR sensor" H 892 5916 50  0000 C CNN
-F 2 "" H 1000 6150 50  0001 C CNN
+F 2 "Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical" H 1000 6150 50  0001 C CNN
 F 3 "~" H 1000 6150 50  0001 C CNN
 	1    1000 6150
 	-1   0    0    1   
@@ -159,16 +147,16 @@ U 1 1 605F81A9
 P 1000 6800
 F 0 "J4" H 892 6475 50  0000 C CNN
 F 1 "Servo motor" H 892 6566 50  0000 C CNN
-F 2 "" H 1000 6800 50  0001 C CNN
+F 2 "Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical" H 1000 6800 50  0001 C CNN
 F 3 "~" H 1000 6800 50  0001 C CNN
 	1    1000 6800
 	-1   0    0    1   
 $EndComp
-Text GLabel 2750 4150 0    59   Input ~ 0
+Text GLabel 4650 4150 0    59   Input ~ 0
 PIR
-Text GLabel 2750 4550 0    59   Input ~ 0
+Text GLabel 4650 4350 0    59   Input ~ 0
 IR
-Text GLabel 2750 4650 0    59   Input ~ 0
+Text GLabel 2750 4150 0    59   Input ~ 0
 Motor
 Text GLabel 1200 6900 2    59   Input ~ 0
 Motor
@@ -268,7 +256,7 @@ U 1 1 6060FAA9
 P 1350 1250
 F 0 "J1" H 1242 925 50  0000 C CNN
 F 1 "POWER " H 1242 1016 50  0000 C CNN
-F 2 "" H 1350 1250 50  0001 C CNN
+F 2 "Connector_JST:JST_EH_B2B-EH-A_1x02_P2.50mm_Vertical" H 1350 1250 50  0001 C CNN
 F 3 "~" H 1350 1250 50  0001 C CNN
 	1    1350 1250
 	-1   0    0    1   
@@ -301,45 +289,39 @@ Wire Wire Line
 	2200 1350 2200 1250
 Wire Wire Line
 	2200 1250 1550 1250
-Wire Wire Line
-	4650 4350 4150 4350
-Wire Wire Line
-	4150 4350 4150 4150
-Wire Wire Line
-	4150 4150 3500 4150
 $Comp
 L Connector:Conn_01x03_Female J5
 U 1 1 6062B731
-P 2500 6350
-F 0 "J5" H 2392 6025 50  0000 C CNN
-F 1 "Descrete sensor of SWORD block pin state" H 1700 6700 50  0000 C CNN
-F 2 "" H 2500 6350 50  0001 C CNN
-F 3 "~" H 2500 6350 50  0001 C CNN
-	1    2500 6350
+P 2600 6550
+F 0 "J5" H 2492 6225 50  0000 C CNN
+F 1 "Motor state - unlock/lock" H 1800 6900 50  0000 C CNN
+F 2 "Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical" H 2600 6550 50  0001 C CNN
+F 3 "~" H 2600 6550 50  0001 C CNN
+	1    2600 6550
 	-1   0    0    1   
 $EndComp
 $Comp
 L cus:GND #PWR013
 U 1 1 6062FD64
-P 3250 6400
-F 0 "#PWR013" H 3250 6150 50  0001 C CNN
-F 1 "GND" H 3255 6227 50  0000 C CNN
-F 2 "" H 3250 6400 50  0001 C CNN
-F 3 "" H 3250 6400 50  0001 C CNN
-	1    3250 6400
+P 3350 6600
+F 0 "#PWR013" H 3350 6350 50  0001 C CNN
+F 1 "GND" H 3355 6427 50  0000 C CNN
+F 2 "" H 3350 6600 50  0001 C CNN
+F 3 "" H 3350 6600 50  0001 C CNN
+	1    3350 6600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2700 6350 3250 6350
+	2800 6550 3350 6550
 Wire Wire Line
-	3250 6350 3250 6400
-Text GLabel 4650 4150 0    59   Input ~ 0
+	3350 6550 3350 6600
+Text GLabel 4650 4850 0    59   Input ~ 0
 PIN_IN
-Text GLabel 4650 4250 0    59   Input ~ 0
+Text GLabel 4650 4950 0    59   Input ~ 0
 PIN_OUT
-Text GLabel 2700 6250 2    59   Input ~ 0
+Text GLabel 2800 6450 2    59   Input ~ 0
 PIN_IN
-Text GLabel 2700 6450 2    59   Input ~ 0
+Text GLabel 2800 6650 2    59   Input ~ 0
 PIN_OUT
 Wire Wire Line
 	6550 3600 6550 3650
@@ -362,7 +344,7 @@ U 1 1 605F67F1
 P 1900 1150
 F 0 "D1" H 1900 933 50  0000 C CNN
 F 1 "D" H 1900 1024 50  0000 C CNN
-F 2 "" H 1900 1150 50  0001 C CNN
+F 2 "Diode_THT:D_DO-41_SOD81_P12.70mm_Horizontal" H 1900 1150 50  0001 C CNN
 F 3 "~" H 1900 1150 50  0001 C CNN
 	1    1900 1150
 	-1   0    0    1   
@@ -371,4 +353,60 @@ Wire Wire Line
 	1550 1150 1750 1150
 Wire Wire Line
 	2050 1150 2200 1150
+Wire Wire Line
+	4650 4250 3750 4250
+Wire Wire Line
+	3750 4250 3750 4150
+Wire Wire Line
+	3750 4150 3500 4150
+NoConn ~ 2750 4550
+NoConn ~ 2750 4650
+NoConn ~ 3500 4650
+NoConn ~ 3500 4550
+$Comp
+L Mechanical:MountingHole_Pad H1
+U 1 1 60779A66
+P 10250 1200
+F 0 "H1" V 10204 1350 50  0000 L CNN
+F 1 "MountingHole_Pad" V 10295 1350 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 10250 1200 50  0001 C CNN
+F 3 "~" H 10250 1200 50  0001 C CNN
+	1    10250 1200
+	0    1    1    0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H2
+U 1 1 6077A825
+P 10250 1500
+F 0 "H2" V 10204 1650 50  0000 L CNN
+F 1 "MountingHole_Pad" V 10295 1650 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 10250 1500 50  0001 C CNN
+F 3 "~" H 10250 1500 50  0001 C CNN
+	1    10250 1500
+	0    1    1    0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H3
+U 1 1 6077CCD7
+P 10250 1800
+F 0 "H3" V 10204 1950 50  0000 L CNN
+F 1 "MountingHole_Pad" V 10295 1950 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 10250 1800 50  0001 C CNN
+F 3 "~" H 10250 1800 50  0001 C CNN
+	1    10250 1800
+	0    1    1    0   
+$EndComp
+$Comp
+L Mechanical:MountingHole_Pad H4
+U 1 1 6077CE5D
+P 10250 2100
+F 0 "H4" V 10204 2250 50  0000 L CNN
+F 1 "MountingHole_Pad" V 10295 2250 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_Pad_Via" H 10250 2100 50  0001 C CNN
+F 3 "~" H 10250 2100 50  0001 C CNN
+	1    10250 2100
+	0    1    1    0   
+$EndComp
+Text Notes 8150 6950 0    79   ~ 0
+PIR - for human motion detection\nIR  - for sword detection, if sword is in place\nPIN IN/OUT - motor lock/unlock position
 $EndSCHEMATC
