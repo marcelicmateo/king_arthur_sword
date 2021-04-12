@@ -5,7 +5,7 @@ Shenanigans with pulling sword out of stone. Only the chosen one['s] are fit to 
 # Project
 
 As a part of sword exibition, we made artifitial stone to hold a sword. Sword was locked in stone by mechanism, and by random chance, relesased. 
-Participant of exibition could then try and pull the sword out of stone, if gode of random was on their side, they would then becom Kings. 
+Participant of exibition could then try and pull the sword out of stone, if GOD of random was on their side, they would then become Kings. 
 
 # Setup 
 
@@ -16,7 +16,7 @@ Run platformio and compile.
 
 ## Hardware
 
-This was builded and tested for Espressif, ESP8266 based dev board, [Nodemcu v1](https://www.nodemcu.com/index_en.html#fr_54747661d775ef1a3600009e).
+This was builded and tested on Espressif, ESP8266 based dev board, [Nodemcu v1](https://www.nodemcu.com/index_en.html#fr_54747661d775ef1a3600009e).
 
 # Details
 
