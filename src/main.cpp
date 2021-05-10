@@ -7,7 +7,7 @@
 #include "sword.h"
 #include "wifi_setup.h"
 
-#define DEBUG false
+#define DEBUG true
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
@@ -35,6 +35,7 @@ void setup() {
   if (!lock_flag && !unlock_flag) {
     unlock_sword();
   }
+
   Serial.println("Begin loop");
 }
 

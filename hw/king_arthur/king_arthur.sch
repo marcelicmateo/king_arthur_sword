@@ -41,7 +41,6 @@ NoConn ~ 6250 4750
 NoConn ~ 6250 4850
 NoConn ~ 6250 4950
 NoConn ~ 6250 5050
-NoConn ~ 4650 3650
 NoConn ~ 4650 3750
 NoConn ~ 4650 3850
 NoConn ~ 4650 3950
@@ -78,7 +77,7 @@ Wire Wire Line
 Wire Wire Line
 	4050 4450 4050 4350
 Wire Wire Line
-	4050 4350 3500 4350
+	4050 4350 3850 4350
 Wire Wire Line
 	3500 4450 3950 4450
 Wire Wire Line
@@ -288,7 +287,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 1350 2200 1250
 Wire Wire Line
-	2200 1250 1550 1250
+	2200 1250 1700 1250
 $Comp
 L Connector:Conn_01x03_Female J5
 U 1 1 6062B731
@@ -300,21 +299,8 @@ F 3 "~" H 2600 6550 50  0001 C CNN
 	1    2600 6550
 	-1   0    0    1   
 $EndComp
-$Comp
-L cus:GND #PWR013
-U 1 1 6062FD64
-P 3350 6600
-F 0 "#PWR013" H 3350 6350 50  0001 C CNN
-F 1 "GND" H 3355 6427 50  0000 C CNN
-F 2 "" H 3350 6600 50  0001 C CNN
-F 3 "" H 3350 6600 50  0001 C CNN
-	1    3350 6600
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	2800 6550 3350 6550
-Wire Wire Line
-	3350 6550 3350 6600
 Text GLabel 4650 4850 0    59   Input ~ 0
 PIN_IN
 Text GLabel 4650 4950 0    59   Input ~ 0
@@ -349,8 +335,6 @@ F 3 "~" H 1900 1150 50  0001 C CNN
 	1    1900 1150
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	1550 1150 1750 1150
 Wire Wire Line
 	2050 1150 2200 1150
 Wire Wire Line
@@ -409,4 +393,106 @@ F 3 "~" H 10250 2100 50  0001 C CNN
 $EndComp
 Text Notes 8150 6950 0    79   ~ 0
 PIR - for human motion detection\nIR  - for sword detection, if sword is in place\nPIN IN/OUT - motor lock/unlock position
+$Comp
+L power:+3V3 #PWR0101
+U 1 1 6099100C
+P 4500 3500
+F 0 "#PWR0101" H 4500 3350 50  0001 C CNN
+F 1 "+3V3" H 4515 3673 50  0000 C CNN
+F 2 "" H 4500 3500 50  0001 C CNN
+F 3 "" H 4500 3500 50  0001 C CNN
+	1    4500 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4500 3500 4500 3650
+Wire Wire Line
+	4500 3650 4650 3650
+$Comp
+L power:+3V3 #PWR0102
+U 1 1 609920CA
+P 3350 6400
+F 0 "#PWR0102" H 3350 6250 50  0001 C CNN
+F 1 "+3V3" H 3365 6573 50  0000 C CNN
+F 2 "" H 3350 6400 50  0001 C CNN
+F 3 "" H 3350 6400 50  0001 C CNN
+	1    3350 6400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 6400 3350 6550
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 60993B61
+P 2200 1150
+F 0 "#FLG0101" H 2200 1225 50  0001 C CNN
+F 1 "PWR_FLAG" V 2200 1278 50  0000 L CNN
+F 2 "" H 2200 1150 50  0001 C CNN
+F 3 "~" H 2200 1150 50  0001 C CNN
+	1    2200 1150
+	0    1    1    0   
+$EndComp
+$Comp
+L power:PWR_FLAG #FLG0102
+U 1 1 609941C4
+P 1700 1250
+F 0 "#FLG0102" H 1700 1325 50  0001 C CNN
+F 1 "PWR_FLAG" H 1700 1423 50  0000 C CNN
+F 2 "" H 1700 1250 50  0001 C CNN
+F 3 "~" H 1700 1250 50  0001 C CNN
+	1    1700 1250
+	-1   0    0    1   
+$EndComp
+Connection ~ 1700 1250
+Wire Wire Line
+	1700 1250 1550 1250
+$Comp
+L cus:GND #PWR0103
+U 1 1 60994B8B
+P 10000 2200
+F 0 "#PWR0103" H 10000 1950 50  0001 C CNN
+F 1 "GND" H 10005 2027 50  0000 C CNN
+F 2 "" H 10000 2200 50  0001 C CNN
+F 3 "" H 10000 2200 50  0001 C CNN
+	1    10000 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10150 1200 10000 1200
+Wire Wire Line
+	10000 1200 10000 1500
+Wire Wire Line
+	10150 2100 10000 2100
+Connection ~ 10000 2100
+Wire Wire Line
+	10000 2100 10000 2200
+Wire Wire Line
+	10150 1800 10000 1800
+Connection ~ 10000 1800
+Wire Wire Line
+	10000 1800 10000 2100
+Wire Wire Line
+	10000 1500 10150 1500
+Connection ~ 10000 1500
+Wire Wire Line
+	10000 1500 10000 1800
+Connection ~ 2200 1150
+Wire Wire Line
+	1550 1150 1750 1150
+$Comp
+L cus:GND #PWR0104
+U 1 1 60999573
+P 3850 4650
+F 0 "#PWR0104" H 3850 4400 50  0001 C CNN
+F 1 "GND" H 3855 4477 50  0000 C CNN
+F 2 "" H 3850 4650 50  0001 C CNN
+F 3 "" H 3850 4650 50  0001 C CNN
+	1    3850 4650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3850 4350 3850 4650
+Connection ~ 3850 4350
+Wire Wire Line
+	3850 4350 3500 4350
 $EndSCHEMATC

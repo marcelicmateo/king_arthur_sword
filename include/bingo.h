@@ -1,15 +1,17 @@
 #pragma once
 #include "include.h"
 
-constexpr uint16 NUMBER_OF_WINNERS{50};
+#include <ESP8266TrueRandom.h>
+
+constexpr uint16 NUMBER_OF_WINNERS{100};
 
 constexpr char BINGO_DATA[]{"Bingo.txt"};
 constexpr char CURRENT_PLAYER_txt[]{"CurrentPlayer.txt"};
 
 uint16 numberOfContestants{0};
 uint16 numberOfWinnings{0};
-int winningNumbers[NUMBER_OF_WINNERS] = {0};
-int currentPlayer{0};
+unsigned int winningNumbers[NUMBER_OF_WINNERS] = {0};
+unsigned int currentPlayer{0};
 
 void write_to_file(String s, String file_name) {
   Serial.println("Writing to file.\n" + s);
@@ -34,8 +36,8 @@ String read_from_file(String file_name) {
   return buff;
 }
 
-void sort(int *a, int n) {
-  int holder;
+void sort(unsigned int *a, int n) {
+  unsigned int holder;
   for (int x = 0; x < numberOfWinnings; x++)
     for (int y = 0; y < numberOfWinnings - 1; y++)
       if (a[y] > a[y + 1]) {
@@ -52,22 +54,26 @@ void change_current_player(int c) {
 }
 
 String generate_bingo_winners() {
-  pinMode(A0, INPUT);
+  // pinMode(A0, INPUT);
   // random noise on adc for random seed
-  randomSeed(analogRead(A0));
+  // randomSeed(analogRead(A0));
 
   change_current_player(0);
   String buf{(String)numberOfContestants + ";" + (String)currentPlayer + ";"};
+  String save{(String)numberOfContestants + ";"};
   Serial.println("Generated random numbers");
-  int tmp{0};
+  unsigned int tmp{0};
   bool done{true};
-  if (numberOfWinnings > numberOfWinnings) {
+  if (numberOfWinnings > numberOfContestants) {
     numberOfWinnings = numberOfContestants;
   }
+  Serial.println("N WINERS: " + (String)numberOfWinnings +
+                 "\nN of People: " + (String)numberOfContestants);
   Serial.println("Generated number: ");
   for (int i = 0; i < numberOfWinnings; i++) {
+
     do { // generate unique numbers
-      tmp = (int)random(1, numberOfContestants + 1);
+      tmp = (unsigned int)ESP8266TrueRandom.random(1, numberOfContestants + 1);
       done = false;
       Serial.print((String)tmp + " ");
       for (int j = 0; j < i; j++) {
@@ -84,8 +90,9 @@ String generate_bingo_winners() {
   sort(winningNumbers, numberOfWinnings);
   for (int i = 0; i < numberOfWinnings; i++) {
     buf += (String)winningNumbers[i] + ";";
+    save += (String)winningNumbers[i] + ";";
   }
-  write_to_file(buf, BINGO_DATA);
+  write_to_file(save, BINGO_DATA);
 
   return buf;
 }

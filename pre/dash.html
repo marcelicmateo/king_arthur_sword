@@ -314,8 +314,11 @@
                     }
                     s += buf[i];
                     document.getElementById('win_numbers').innerHTML = s;
+                    document.getElementById('submit_button').innerHTML = "Generiraj";
 
-                }
+                } else {
+                    document.getElementById('submit_button').innerHTML = "Loading";
+                };
             };
             xhttp.open("GET", "/generate_new_bingo?p=" + document.getElementById("new_number_of_players").value + "&n=" + document.getElementById("new_number_of_winners").value, true);
             xhttp.send();

@@ -2,7 +2,7 @@
 #include "include.h"
 #include <ESP8266WiFi.h>
 
-//#define DEV
+// #define DEV
 
 constexpr char ssid[] = "Kralj";
 constexpr char password[] = "artur123";

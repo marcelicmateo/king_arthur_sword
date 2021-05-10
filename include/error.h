@@ -9,6 +9,7 @@ void error_motor_stuck() {
   previousState = state;
   state = 127;
 }
+
 void error_motor_cant_lock() {
   // error on locking sword
   previousState = state;

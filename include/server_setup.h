@@ -28,9 +28,9 @@ const char *generate_new_bingo(AsyncWebServerRequest *request) {
   static String buff{""};
   numberOfContestants = request->getParam(0)->value().toInt();
   numberOfWinnings = request->getParam(1)->value().toInt();
-  buff = generate_bingo_winners();
   Serial.println("N of Contestans: " + (String)numberOfContestants);
   Serial.println("N of Winners: " + (String)numberOfWinnings);
+  buff = generate_bingo_winners();
   Serial.println("Sending back: " + buff);
   return buff.c_str();
 }
