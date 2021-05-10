@@ -7,7 +7,7 @@
 #include "sword.h"
 #include "wifi_setup.h"
 
-#define DEBUG true
+#define DEBUG false
 #define Serial                                                                 \
   if (DEBUG)                                                                   \
   Serial
