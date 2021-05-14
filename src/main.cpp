@@ -64,6 +64,9 @@ void loop() {
   case 3:
     play_bingo();
     break;
+  case 4:
+    play_random();
+    break;
   default:
     // 0
     // should never come to this value

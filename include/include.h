@@ -6,17 +6,17 @@
 
 void init_gpio();
 
-#define PIR_SENSOR D7 // human sensor
+#define PIR_SENSOR D7               // human sensor
 #define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic
-#define STEPER_MOTOR D6 // steper control
+#define STEPER_MOTOR D6             // steper control
 
 #define PIN_IN D2
 #define PIN_OUT D1
 
 bool all_pass{false}; // defines user unlock
 
-unsigned short int probability_to_pass{10}; // probability to pass
-uint8_t state{3};                           // 3 nacina rada sustava
+uint16 probability_for_king{10};
+uint8_t state{3}; // 3 nacina rada sustava
 
 Servo motor;
 

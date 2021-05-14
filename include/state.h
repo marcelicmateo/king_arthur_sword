@@ -55,3 +55,45 @@ void play_bingo() {
     break;
   }
 }
+
+#include <ESP8266TrueRandom.h>
+
+bool is_player_king() {
+  uint16 p{(uint16)ESP8266TrueRandom.random(99)};
+  Serial.println("Random num: " + (String)p);
+  if (p < probability_for_king)
+    return true;
+  return false;
+}
+
+void play_random() {
+  Serial.println("State 4");
+
+  switch (pir_states()) {
+  case 0b01:
+    // new human on platform
+    change_current_player(currentPlayer + 1);
+    if (is_player_king()) {
+      unlock_sword();
+    }
+    break;
+  case 0b11:
+    // human on platform do nothing
+    break;
+  case 0b10:
+    // human left platform
+    if (is_sword_present()) {
+      lock_sword();
+    }
+    break;
+  case 0b00:
+    // no one is on platform
+    // do nothing
+    if (is_sword_present()) {
+      lock_sword();
+    }
+    break;
+  default:
+    break;
+  }
+}

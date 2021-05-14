@@ -37,10 +37,10 @@ bool lock_sword() {
   // debounce motor back to 0 position
   motor.writeMicroseconds(motor_stop + 300);
   yield();
-  delay(100);
+  delay(200);
   motor.writeMicroseconds(motor_stop + 100);
   yield();
-  delay(100);
+  delay(200);
   motor.writeMicroseconds(motor_stop);
 
   unlock_flag = false;
@@ -83,10 +83,10 @@ bool unlock_sword() {
 
   motor.writeMicroseconds(motor_stop - 300);
   yield();
-  delay(50);
+  delay(100);
   motor.writeMicroseconds(motor_stop - 100);
   yield();
-  delay(100);
+  delay(200);
   motor.writeMicroseconds(motor_stop);
 
   unlock_flag = true;

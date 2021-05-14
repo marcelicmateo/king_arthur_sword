@@ -12,12 +12,13 @@
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: white;
+            margin: 5px;
         }
 
         h2 {
-            font-size: 1.5rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #143642;
         }
@@ -33,11 +34,11 @@
 
         span {
             border-radius: 5px;
-            padding: 5px;
+            padding: 0px;
         }
 
         .content {
-            padding: 30px;
+            padding: 5px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -45,14 +46,14 @@
         .card {
             background-color: #F8F7F9;
             ;
-            box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
-            padding-top: 10px;
-            padding-bottom: 20px;
+            box-shadow: 2px 2px 2px 1px rgba(140, 140, 140, .5);
+            padding-top: 5px;
+            padding-bottom: 10px;
         }
 
         .button {
             padding: 15px 50px;
-            font-size: 20px;
+            font-size: 1em;
             text-align: center;
             outline: none;
             color: rgb(0, 0, 0);
@@ -66,14 +67,15 @@
 
 
         .state {
-            font-size: 1.5rem;
+            font-size: 1rem;
             color: #373d49;
             font-weight: bold;
             display: flex;
             justify-content: space-evenly;
             flex-flow: wrap;
             border-radius: 5px;
-            padding: 2px
+            padding: 2px;
+            margin: 1px
         }
 
         .status_sustava {
@@ -103,7 +105,7 @@
     </style>
 </head>
 
-<body>
+<body onload="on_load()">
     <div class="topnav">
         <h1>Kontrola Mehanizma</h1>
         <p class="state"><span class='status_sustava'> Status sustava: </span><span class='status_sustava'
@@ -123,14 +125,15 @@
                     <option value=1>1 - Mac upotpunosti OTKLJUCAN</option>
                     <option value=2>2 - Mac upotpunosti ZAKLJUCAN</option>
                     <option value=3>3 - Play BINGO </option>
+                    <option value=4>4 - RANDOM KING </option>
+
                 </select>
                 <button class="button" id="lock_command_button" onclick="change_state()">Promijeni</button>
             </p>
-
-
         </div>
     </div>
-    <div class="content">
+
+    <div class="content" id="div_bingo">
         <div class="card">
             <h2>Play BINGO</h2>
             <p class="state"><span>Broj Igraca: </span><span id=num_players>%NUMBER_OF_PLAYERS%</span>
@@ -139,8 +142,6 @@
             <p class="state"><span>Dobitni brojevi: </span><span id=win_numbers>%WINNING_NUMBERS%</span></p>
             <p class="state"><span>Trenutni igrac: </span><span id=current_player>%CURRENT_PLAYER%</span> </p>
         </div>
-    </div>
-    <div class="content">
         <div class="card">
             <h2>Generiraj novi BINGO</h2>
 
@@ -154,7 +155,18 @@
             <button class="button" id="submit_button" onclick=generate_new_bingo()>Generiraj</button>
         </div>
     </div>
+    <div class="content" id="div_random">
+        <div class="card">
+            <h2>Random KING chance</h2>
+            <p class="state"><span>Trenutna sansa </span><span id="current_probability">%OLD_CHANCE%</span></p>
+            <p class="state"><span>Nova sansa </span><input id="new_probability" type="number" max=99 min=0
+                    defaultValue="10">
+            </p>
+            <button class="button" id="chance_button" onclick="change_probability()">Promijeni</button>
+        </div>
+    </div>
 
+    <!--
     <div class="content">
         <div class="card">
             <h2></h2>
@@ -168,10 +180,35 @@
                     style="background-color:rgb(205, 231, 143);"></span></p>
         </div>
     </div>
-
+-->
 
 
     <script>
+        function on_load() {
+            document.getElementById("div_bingo").style.display = "none";
+            document.getElementById("div_random").style.display = "none";
+            switch (document.getElementById("status_nacin_rada").innerText) {
+                case "3":
+                    document.getElementById("status_nacin_rada").innerHTML = "3 - BINGO";
+                    document.getElementById("div_bingo").style.display = "block";
+                    break;
+                case "4":
+                    document.getElementById("status_nacin_rada").innerHTML = "4 - RANDOM KING";
+                    document.getElementById("div_random").style.display = "block";
+                    break;
+            };
+        };
+
+        function change_probability() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("current_probability").innerHTML = this.responseText;
+                };
+            };
+            xhttp.open("GET", "/change_probability?p=" + document.getElementById("new_probability").value, true);
+            xhttp.send();
+        };
 
         function exit_error() {
             var xhttp = new XMLHttpRequest();
@@ -258,9 +295,18 @@
                             break;
                         case 3:
                             document.getElementById("status_nacin_rada").innerHTML = "3 - BINGO";
+                            document.getElementById("div_bingo").style.display = "block";
+                            break;
+                        case 4:
+                            document.getElementById("status_nacin_rada").innerHTML = "4 - RANDOM KING";
+                            document.getElementById("div_random").style.display = "block";
                             break;
 
                     };
+                }
+                else {
+                    document.getElementById("div_bingo").style.display = "none";
+                    document.getElementById("div_random").style.display = "none";
                 };
             };
             xhttp.open("GET", "/change_state?p=" + document.getElementById("new_state").value, true);
@@ -273,6 +319,7 @@
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var ir_pir = this.responseText.split(";");
+                    /*
                     if (ir_pir[1] == '0') {
                         document.getElementById('pir_sensor').setAttribute('style', 'background-color:lightcoral');
                         document.getElementById("pir_sensor").innerHTML = "FALSE";
@@ -290,7 +337,8 @@
                         document.getElementById("ir_sensor").innerHTML = "TRUE";
                     }
                     document.getElementById('lock_flag').innerHTML = ir_pir[2];
-                    document.getElementById('unlock_flag').innerHTML = ir_pir[3];
+                    document.getElementById('unlock_flag').innerHTML = ir_pir[3]; 
+                    */
                     document.getElementById('current_player').innerHTML = ir_pir[4];
 
                 }

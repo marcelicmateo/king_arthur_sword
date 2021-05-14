@@ -64,6 +64,14 @@ String winning_numbers() {
   return buf;
 }
 
+const char *change_probability(AsyncWebServerRequest *request) {
+  static String buf{};
+  probability_for_king = request->getParam(0)->value().toInt();
+  buf = (String)probability_for_king;
+  Serial.println("New chance KING: " + buf);
+  return buf.c_str();
+}
+
 String processor(const String &var) {
   // replace place holder values in HTML page
 
@@ -85,6 +93,8 @@ String processor(const String &var) {
     return (String)numberOfWinnings;
   else if (var == "CURRENT_PLAYER")
     return (String)currentPlayer;
+  else if (var == "OLD_CHANCE")
+    return (String)probability_for_king;
   else if (var == "WINNING_NUMBERS")
     return winning_numbers();
   return String();
@@ -121,6 +131,11 @@ void server_setup() {
     Serial.println("GET: exit_error");
     request->send_P(200, "text/plain", exit_error(), 1);
   });
+  server.on("/change_probability", HTTP_GET,
+            [](AsyncWebServerRequest *request) {
+              Serial.println("GET: change_probability");
+              request->send_P(200, "text/plain", change_probability(request));
+            });
 
   // OTA update server
   AsyncElegantOTA.begin(&server);
