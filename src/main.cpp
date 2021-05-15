@@ -7,9 +7,9 @@
 #include "sword.h"
 #include "wifi_setup.h"
 
-#ifdef DEBUG
-#define Serial Serial
-#endif
+#define Serial                                                                 \
+  if (SERIAL)                                                                  \
+  Serial
 
 void setup() {
 

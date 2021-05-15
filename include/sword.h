@@ -15,6 +15,7 @@ bool lock_sword() {
   unsigned long cMillis = pMillis;
 
   motor.writeMicroseconds(motor_lock);
+  yield();
   while (b == LOW) {
     // periodicaly read unlock stop pin
     b = digitalRead(PIN_IN);
@@ -23,6 +24,7 @@ bool lock_sword() {
       // block in a way of pin
       // try to unlock
       unlock_flag = false; // we moved pin, somewere in the middle
+      yield();
       if (unlock_sword() == true) {
         // stop motor, and raise critical error
         error_motor_cant_lock();
@@ -43,6 +45,7 @@ bool lock_sword() {
   yield();
   delay(200);
   motor.writeMicroseconds(motor_stop);
+  yield();
 
   unlock_flag = false;
   lock_flag = true;
@@ -68,11 +71,14 @@ bool unlock_sword() {
   Serial.println("Unlocking sword");
 
   motor.writeMicroseconds(motor_unlock);
+  yield();
 
   while (b == LOW) {
     if (cMillis - pMillis >= motor_move_time) {
       // if second has passed and motor isnt unlocked, it is stuck raise
       motor.writeMicroseconds(motor_stop);
+      yield();
+
       error_motor_stuck();
       return false;
     }
@@ -89,6 +95,7 @@ bool unlock_sword() {
   yield();
   delay(200);
   motor.writeMicroseconds(motor_stop);
+  yield();
 
   unlock_flag = true;
   lock_flag = false;
