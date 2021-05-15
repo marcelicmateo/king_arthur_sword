@@ -53,13 +53,14 @@ void change_current_player(int c) {
   return;
 }
 
-String generate_bingo_winners() {
+void generate_bingo_winners() {
   // pinMode(A0, INPUT);
   // random noise on adc for random seed
   // randomSeed(analogRead(A0));
 
   change_current_player(0);
-  String buf{(String)numberOfContestants + ";" + (String)currentPlayer + ";"};
+  // String buf{(String)numberOfContestants + ";" + (String)currentPlayer +
+  // ";"};
   String save{(String)numberOfContestants + ";"};
   Serial.println("Generated random numbers");
   unsigned int tmp{0};
@@ -89,12 +90,12 @@ String generate_bingo_winners() {
 
   sort(winningNumbers, numberOfWinnings);
   for (int i = 0; i < numberOfWinnings; i++) {
-    buf += (String)winningNumbers[i] + ";";
+    // buf += (String)winningNumbers[i] + ";";
     save += (String)winningNumbers[i] + ";";
   }
   write_to_file(save, BINGO_DATA);
 
-  return buf;
+  return;
 }
 
 void get_bingo_data() {

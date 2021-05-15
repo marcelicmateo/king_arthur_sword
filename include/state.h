@@ -27,6 +27,11 @@ bool is_player_winner() {
 void play_bingo() {
   Serial.println("State 3");
 
+  if (f_generate_new_bingo) {
+    generate_bingo_winners();
+    f_generate_new_bingo=0;
+  }
+
   switch (pir_states()) {
   case 0b01:
     // new human on platform

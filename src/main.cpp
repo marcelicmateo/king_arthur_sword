@@ -37,7 +37,7 @@ void setup() {
 
   Serial.println(system_get_cpu_freq());
   Serial.println("Begin loop");
-  Serial.println(state, LITTLE_ENDIAN);
+  Serial.println(state, BIN);
 }
 
 unsigned long current_milis = millis();
@@ -45,10 +45,6 @@ unsigned long previous_milis = 0;
 
 void handle_flag_cases(uint8_t f) {
   switch (f) {
-  case 0b00000100:
-    generate_bingo_winners();
-    state &= ~(f); // clear flag
-    break;
   case 0b00000010:
     error_motor_cant_lock();
     break;
@@ -60,13 +56,37 @@ void handle_flag_cases(uint8_t f) {
   }
 }
 
+void generate_system_status(String *buf) {
+  static String s_error;
+  static String n_players;
+  static String n_winners;
+  static String bingo_numbers;
+  static String n_curent_pl;
+  // static String s_state;
+  lock = 1;
+  s_error = (String)(state & 0b0000111);
+  n_players = (String)numberOfContestants;
+  n_winners = (String)numberOfWinnings;
+  bingo_numbers = winning_numbers();
+  yield();
+  n_curent_pl = (String)currentPlayer;
+
+  *buf = s_error + ';' + n_curent_pl + ';' + n_players + ';' + n_winners + ';' +
+         bingo_numbers;
+  lock = 0;
+  yield();
+  Serial.println("Buffer: " + *buf);
+  return;
+}
+
 void loop() {
-  static uint8_t flag_case;
+  // static uint8_t flag_case;
 
   AsyncElegantOTA.loop(); // service OTA updates
-
-  flag_case = state & 0b0000111; // mask flag cases
-  handle_flag_cases(flag_case);
+                          /*
+                            flag_case = state & 0b0000111; // mask flag cases
+                            handle_flag_cases(flag_case);
+                          */
 
   switch (state) { // state machine
   // clean cases
@@ -87,9 +107,11 @@ void loop() {
     // should never come to this value
     // wdt reset hapend
     Serial.print("Error, state = ");
-    Serial.println(state, LITTLE_ENDIAN);
+    Serial.println(state, BIN);
   }
 
+  generate_system_status(&system_buffer);
+
   // yield(); // let ESP do stuff
-  // delay(250);
+  delay(50);
 }

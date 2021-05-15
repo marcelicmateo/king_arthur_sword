@@ -17,7 +17,9 @@ bool all_pass{false}; // defines user unlock
 
 uint16 probability_for_king{10};
 uint8_t state{0b10000000}; // 3 nacina rada sustava
-
+bool f_generate_new_bingo = 0;
+String system_buffer = {};
+bool lock{0};
 Servo motor;
 
 constexpr unsigned short int motor_unlock{MIN_PULSE_WIDTH - 1};

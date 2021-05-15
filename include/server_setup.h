@@ -25,53 +25,58 @@ const char *ir_pir_state() {
 }
 
 const char *generate_new_bingo(AsyncWebServerRequest *request) {
-  static String buff{""};
+  static String buff{"Generating"};
   numberOfContestants = request->getParam(0)->value().toInt();
   numberOfWinnings = request->getParam(1)->value().toInt();
   Serial.println("N of Contestans: " + (String)numberOfContestants);
   Serial.println("N of Winners: " + (String)numberOfWinnings);
   // buff = generate_bingo_winners();
-  state |= 0b00000010; // set flag to generate new bingo;
-                       // Serial.println("Sending back: " + buff);
+  f_generate_new_bingo = 1; // set flag to generate new bingo;
+                            // Serial.println("Sending back: " + buff);
   return buff.c_str();
+}
+
+uint8_t state_to_number(const uint8_t s) {
+  uint8_t ret = 0;
+  switch ((s & 0b11111000)) {
+  // clean cases
+  case 0b10000000:
+    ret = 1;
+    break;
+  case 0b01000000:
+    ret = 2;
+    break;
+  case 0b00100000:
+    ret = 3;
+    break;
+  case 0b00010000:
+    ret = 4;
+    break;
+  default:
+    break;
+  }
+  return ret;
 }
 
 uint8_t *change_state(AsyncWebServerRequest *request) {
   Serial.println("State value: " + request->getParam(0)->value());
   long shift = request->getParam(0)->value().toInt();
-  if (previousState == 0) {
-    state =
-        ((state & 0b00000111) | (1 << (8 - shift))); // clear states and set new
-    /*
-      // assures that only if not in error, state can be changed
-      switch (request->getParam(0)->value().toInt()) {
-      case 1:
-        state |= 0b10000000;
-        break;
-      case 2:
-        state |= 0b01000000;
-        break;
-      case 3:
-        state |= 0b00100000;
-        break;
-      case 4:
-        state |= 0b00010000;
-      default:
-        break;
-      }*/
-    Serial.println("New value: " + (String)state);
-    return &state;
-  } else
-    // return previous state of machine
-    return &state;
+  state =
+      ((state & 0b00000111) | (1 << (8 - shift))); // clear states and set new
+
+  static uint8_t ret{0};
+  ret = state_to_number(state);
+  return &ret;
 }
 
 uint8_t *exit_error() {
   system_restore_state();
-  return &state;
+  static uint8_t ret;
+  ret = state_to_number(state);
+  return &ret;
 }
 
-uint8_t *system_status() { return &state; }
+const char *system_status() { return system_buffer.c_str(); }
 
 String winning_numbers() {
   String buf{""};
@@ -103,7 +108,7 @@ String processor(const String &var) {
   } else if (var == "IR_SENSOR") {
     return (String)(digitalRead(INFRARED_OBSTICLE_SENSOR) ? "TRUE" : "FALSE");
   } else if (var == "NACIN_RADA") {
-    return (String)state;
+    return (String)state_to_number(state);
   } else if (var == "SYSTEM_STATUS") {
     return ((String)0);
   } else if (var == "NUMBER_OF_PLAYERS") {
@@ -143,7 +148,7 @@ void server_setup() {
 
   server.on("/system_status", HTTP_GET, [](AsyncWebServerRequest *request) {
     Serial.println("GET: system_status");
-    request->send_P(200, "text/plain", system_status(), 1);
+    request->send_P(200, "text/plain", system_status());
   });
 
   server.on("/exit_error", HTTP_GET, [](AsyncWebServerRequest *request) {
