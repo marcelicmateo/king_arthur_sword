@@ -30,16 +30,35 @@ const char *generate_new_bingo(AsyncWebServerRequest *request) {
   numberOfWinnings = request->getParam(1)->value().toInt();
   Serial.println("N of Contestans: " + (String)numberOfContestants);
   Serial.println("N of Winners: " + (String)numberOfWinnings);
-  buff = generate_bingo_winners();
-  Serial.println("Sending back: " + buff);
+  // buff = generate_bingo_winners();
+  state |= 0b00000010; // set flag to generate new bingo;
+                       // Serial.println("Sending back: " + buff);
   return buff.c_str();
 }
 
 uint8_t *change_state(AsyncWebServerRequest *request) {
   Serial.println("State value: " + request->getParam(0)->value());
+  long shift = request->getParam(0)->value().toInt();
   if (previousState == 0) {
-    // assures that only if not in error, state can be changed
-    state = request->getParam(0)->value().toInt();
+    state =
+        ((state & 0b00000111) | (1 << (8 - shift))); // clear states and set new
+    /*
+      // assures that only if not in error, state can be changed
+      switch (request->getParam(0)->value().toInt()) {
+      case 1:
+        state |= 0b10000000;
+        break;
+      case 2:
+        state |= 0b01000000;
+        break;
+      case 3:
+        state |= 0b00100000;
+        break;
+      case 4:
+        state |= 0b00010000;
+      default:
+        break;
+      }*/
     Serial.println("New value: " + (String)state);
     return &state;
   } else

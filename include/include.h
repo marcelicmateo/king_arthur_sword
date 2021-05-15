@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-void init_gpio();
+void init_gpio_pins();
 
 #define PIR_SENSOR D7               // human sensor
 #define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic
@@ -16,7 +16,7 @@ void init_gpio();
 bool all_pass{false}; // defines user unlock
 
 uint16 probability_for_king{10};
-uint8_t state{3}; // 3 nacina rada sustava
+uint8_t state{0b10000000}; // 3 nacina rada sustava
 
 Servo motor;
 

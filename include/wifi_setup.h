@@ -10,13 +10,24 @@ constexpr int channel = 1;
 constexpr int ssid_hidden = 0; // hidden if true
 constexpr int max_connection = 4;
 
+// Set your Static IP address
+IPAddress local_IP(192, 168, 0, 100);
+// Set your Gateway IP address
+IPAddress gateway(192, 168, 0, 1);
+
+IPAddress subnet(255, 255, 255, 0);
+
 void wifi_setup(void) {
-#ifndef DEV
+#ifdef RELEASE
   WiFi.softAP(ssid, password, channel, ssid_hidden, max_connection);
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(IP);
 #else
+  if (!WiFi.config(local_IP, gateway, subnet)) {
+    Serial.println("STA Failed to configure");
+    ESP.reset();
+  }
   WiFi.begin("Nema Veze", "Bodulo94");
 
   Serial.print("Connecting");
