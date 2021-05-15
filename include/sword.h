@@ -7,6 +7,7 @@ bool lock_sword() {
   if (lock_flag == true) {
     Serial.println("Sword already locked");
     motor.writeMicroseconds(motor_stop);
+
     return true;
   }
   Serial.println("Locking sword");

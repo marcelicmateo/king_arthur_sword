@@ -131,6 +131,7 @@ void server_setup() {
     Serial.println("GET: exit_error");
     request->send_P(200, "text/plain", exit_error(), 1);
   });
+
   server.on("/change_probability", HTTP_GET,
             [](AsyncWebServerRequest *request) {
               Serial.println("GET: change_probability");
