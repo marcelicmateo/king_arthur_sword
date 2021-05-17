@@ -6,14 +6,14 @@
 #include "state.h"
 #include "sword.h"
 #include "wifi_setup.h"
-/*
+
 #define Serial                                                                 \
   if (SERIAL)                                                                  \
   Serial
-*/
+
 void setup() {
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(500); // get serial up
 
   Serial.println("SETUP BEGIN");
@@ -26,6 +26,9 @@ void setup() {
   }
 
   get_bingo_data();
+  load_state();
+  load_hold();
+  load_flags();
 
   wifi_setup();
 
@@ -82,11 +85,11 @@ void generate_system_status(String *buf) {
 void loop() {
   // static uint8_t flag_case;
 
-  AsyncElegantOTA.loop(); // service OTA updates
-                          /*
-                            flag_case = state & 0b0000111; // mask flag cases
-                            handle_flag_cases(flag_case);
-                          */
+  // AsyncElegantOTA.loop(); // service OTA updates
+  /*
+    flag_case = state & 0b0000111; // mask flag cases
+    handle_flag_cases(flag_case);
+  */
 
   switch (state) { // state machine
   // clean cases

@@ -9,7 +9,11 @@ void sword_prema_unlocked() { // state 1
 
 void sword_prema_locked() {
   Serial.println("State 2");
-  lock_sword();
+  if (is_sword_present()) {
+    lock_sword();
+  } else {
+    unlock_sword();
+  }
   return;
 }
 
@@ -29,24 +33,46 @@ void play_bingo() {
 
   if (f_generate_new_bingo) {
     generate_bingo_winners();
-    f_generate_new_bingo=0;
+    f_generate_new_bingo = 0;
   }
-
+  if (hold) {
+    unlock_sword();
+  }
   switch (pir_states()) {
   case 0b01:
     // new human on platform
-    change_current_player(currentPlayer + 1);
-    if (is_player_winner()) {
-      unlock_sword();
+    if (hold != 1) {
+      change_current_player(currentPlayer + 1);
+      if (is_player_winner()) {
+        unlock_sword();
+        hold = 1;
+        save_hold();
+      }
     }
     break;
   case 0b11:
-    // human on platform do nothing
+    if (hold) {
+      unlock_sword();
+    } else {
+      if (is_sword_present()) {
+        lock_sword();
+        hold = 0;
+        save_hold();
+
+      } else {
+        unlock_sword();
+      }
+    }
     break;
   case 0b10:
     // human left platform
     if (is_sword_present()) {
       lock_sword();
+      hold = 0;
+      save_hold();
+
+    } else {
+      unlock_sword();
     }
     break;
   case 0b00:
@@ -54,6 +80,11 @@ void play_bingo() {
     // do nothing
     if (is_sword_present()) {
       lock_sword();
+      hold = 0;
+      save_hold();
+
+    } else {
+      unlock_sword();
     }
     break;
   default:
@@ -74,21 +105,45 @@ bool is_player_king() {
 void play_random() {
   Serial.println("State 4");
 
+  if (hold) {
+    unlock_sword();
+  }
+
   switch (pir_states()) {
   case 0b01:
     // new human on platform
-    change_current_player(currentPlayer + 1);
-    if (is_player_king()) {
-      unlock_sword();
+    if (hold != 1) {
+      change_current_player(currentPlayer + 1);
+      if (is_player_king()) {
+        unlock_sword();
+        hold = 1;
+        save_hold();
+      }
     }
     break;
   case 0b11:
-    // human on platform do nothing
+    if (hold) {
+      unlock_sword();
+    } else {
+      if (is_sword_present()) {
+        lock_sword();
+        hold = 0;
+        save_hold();
+
+      } else {
+        unlock_sword();
+      }
+    }
     break;
   case 0b10:
     // human left platform
     if (is_sword_present()) {
       lock_sword();
+      hold = 0;
+      save_hold();
+
+    } else {
+      unlock_sword();
     }
     break;
   case 0b00:
@@ -96,6 +151,11 @@ void play_random() {
     // do nothing
     if (is_sword_present()) {
       lock_sword();
+      hold = 0;
+      save_hold();
+
+    } else {
+      unlock_sword();
     }
     break;
   default:

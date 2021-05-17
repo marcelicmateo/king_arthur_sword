@@ -3,7 +3,6 @@
 #include "dash.h"
 #include "include.h"
 
-#include <AsyncElegantOTA.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
@@ -30,9 +29,7 @@ const char *generate_new_bingo(AsyncWebServerRequest *request) {
   numberOfWinnings = request->getParam(1)->value().toInt();
   Serial.println("N of Contestans: " + (String)numberOfContestants);
   Serial.println("N of Winners: " + (String)numberOfWinnings);
-  // buff = generate_bingo_winners();
   f_generate_new_bingo = 1; // set flag to generate new bingo;
-                            // Serial.println("Sending back: " + buff);
   return buff.c_str();
 }
 
@@ -63,7 +60,7 @@ uint8_t *change_state(AsyncWebServerRequest *request) {
   long shift = request->getParam(0)->value().toInt();
   state =
       ((state & 0b00000111) | (1 << (8 - shift))); // clear states and set new
-
+  save_state(state);
   static uint8_t ret{0};
   ret = state_to_number(state);
   return &ret;
@@ -83,6 +80,7 @@ String winning_numbers() {
   int i{0};
   for (i = 0; i < numberOfWinnings - 1; i++) {
     buf += (String)winningNumbers[i] + ",";
+    yield();
   }
   buf += winningNumbers[i];
   return buf;
@@ -120,7 +118,7 @@ String processor(const String &var) {
   else if (var == "OLD_CHANCE")
     return (String)probability_for_king;
   else if (var == "WINNING_NUMBERS")
-    return winning_numbers();
+    return String();
   return String();
 }
 
@@ -162,8 +160,6 @@ void server_setup() {
               request->send_P(200, "text/plain", change_probability(request));
             });
 
-  // OTA update server
-  AsyncElegantOTA.begin(&server);
   // Start server
   server.begin();
 }

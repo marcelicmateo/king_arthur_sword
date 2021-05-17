@@ -13,29 +13,6 @@ uint16 numberOfWinnings{0};
 unsigned int winningNumbers[NUMBER_OF_WINNERS] = {0};
 unsigned int currentPlayer{0};
 
-void write_to_file(String s, String file_name) {
-  Serial.println("Writing to file.\n" + s);
-
-  File f = LittleFS.open(file_name, "w");
-  for (uint i = 0; i < s.length(); i++) {
-    f.write(s[i]);
-  }
-  f.close();
-}
-
-String read_from_file(String file_name) {
-  String buff{""};
-  if (LittleFS.exists(file_name)) {
-    File f = LittleFS.open(file_name, "r");
-    buff = f.readString();
-    Serial.println("Read: " + buff);
-    f.close();
-  } else {
-    Serial.println("Error reading.\nFile >" + file_name + "< does not exist");
-  }
-  return buff;
-}
-
 void sort(unsigned int *a, int n) {
   unsigned int holder;
   for (int x = 0; x < numberOfWinnings; x++)
@@ -54,13 +31,9 @@ void change_current_player(int c) {
 }
 
 void generate_bingo_winners() {
-  // pinMode(A0, INPUT);
-  // random noise on adc for random seed
-  // randomSeed(analogRead(A0));
 
   change_current_player(0);
-  // String buf{(String)numberOfContestants + ";" + (String)currentPlayer +
-  // ";"};
+
   String save{(String)numberOfContestants + ";"};
   Serial.println("Generated random numbers");
   unsigned int tmp{0};
@@ -90,7 +63,6 @@ void generate_bingo_winners() {
 
   sort(winningNumbers, numberOfWinnings);
   for (int i = 0; i < numberOfWinnings; i++) {
-    // buf += (String)winningNumbers[i] + ";";
     save += (String)winningNumbers[i] + ";";
   }
   write_to_file(save, BINGO_DATA);
