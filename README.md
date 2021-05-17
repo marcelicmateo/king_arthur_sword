@@ -1,7 +1,8 @@
 # King Arthur's sword
 
 Shenanigans with pulling sword out of stone. Only the chosen one['s] are fit to be a king.
-
+# Release
+This is release present in real life system. Depoyed solution. 
 # Project
 
 As a part of sword exibition, we made artifitial stone to hold a sword. Sword was locked in stone by mechanism, and by random chance, relesased. 
