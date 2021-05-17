@@ -6,11 +6,11 @@
 #include "state.h"
 #include "sword.h"
 #include "wifi_setup.h"
-
+/*
 #define Serial                                                                 \
   if (SERIAL)                                                                  \
   Serial
-
+*/
 void setup() {
 
   Serial.begin(115200);

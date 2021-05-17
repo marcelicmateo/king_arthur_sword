@@ -7,11 +7,11 @@
 void init_gpio_pins();
 
 #define PIR_SENSOR D7               // human sensor
-#define INFRARED_OBSTICLE_SENSOR D5 // sword sensor, inverted logic
-#define STEPER_MOTOR D6             // steper control
+#define INFRARED_OBSTICLE_SENSOR D6 // sword sensor, inverted logic
+#define STEPER_MOTOR D1             // steper control
 
-#define PIN_IN D2
-#define PIN_OUT D1
+#define PIN_IN D3
+#define PIN_OUT D4
 
 bool all_pass{false}; // defines user unlock
 

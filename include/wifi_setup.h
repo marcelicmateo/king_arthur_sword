@@ -18,7 +18,7 @@ IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 void wifi_setup(void) {
-#ifdef RELEASE
+#ifdef DEV_WIFI
   WiFi.softAP(ssid, password, channel, ssid_hidden, max_connection);
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
